@@ -1,0 +1,6 @@
+import WrongName
+
+main =  
+  ALLOW
+  EXCEPT
+    DENY WrongName::bob

@@ -1,0 +1,21 @@
+export NameWrong where
+
+data Actors = 
+  Looker(Analyst),
+  Analyst(Alice, Bob),
+  Intern(Bob, Jeff),
+  Alice, Bob, Jeff
+
+data Actions = Reads, Deletes, Updates
+
+data Resources = 
+  Claims(Finance),
+  Finance(Customers, Companies),
+  Customers(CCN), Companies(EMAIL, SSN),
+  CCN, EMAIL, SSN
+
+bob = DENY {
+        Actors = Bob
+        Resources = EMAIL
+        Actions = Deletes
+      }

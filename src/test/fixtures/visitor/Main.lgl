@@ -1,0 +1,6 @@
+import Privacy
+
+main =  
+  DENY
+  EXCEPT
+    ALLOW Privacy::analystActions
