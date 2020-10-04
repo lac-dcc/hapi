@@ -38,8 +38,30 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.11.1")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.2")
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.4.2")
-
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.2")
+
+    compile("com.yuvalshavit:antlr-denter:1.1")
+}
+
+application {
+    mainClassName = "tasks.YAMLKt"
+}
+
+tasks.named("cleanTest") { 
+    group = "verification"
+}
+
+tasks.generateGrammarSource {
+    arguments = arguments + listOf("-no-listener", "-visitor")
+}
+
+tasks.named("compileKotlin") {
+    dependsOn(":generateGrammarSource")
+}
+
+task("print", JavaExec::class) {
+    main = "tasks.PrintKt"
+    classpath = sourceSets["main"].runtimeClasspath
 }
 
 tasks.test {
@@ -96,23 +118,3 @@ tasks.test {
     })
 }
 
-application {
-    mainClassName = "tasks.YAMLKt"
-}
-
-tasks.named("cleanTest") { 
-    group = "verification"
-}
-
-tasks.generateGrammarSource {
-    arguments = arguments + listOf("-no-listener", "-visitor")
-}
-
-tasks.named("compileKotlin") {
-    dependsOn(":generateGrammarSource")
-}
-
-task("print", JavaExec::class) {
-    main = "tasks.PrintKt"
-    classpath = sourceSets["main"].runtimeClasspath
-}

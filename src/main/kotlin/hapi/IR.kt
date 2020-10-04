@@ -1,4 +1,4 @@
-package legalease;
+package hapi
 
 import org.antlr.v4.runtime.*
 import org.antlr.v4.runtime.tree.ParseTree
@@ -6,8 +6,8 @@ import org.antlr.v4.runtime.tree.ParseTree
 import java.io.FileInputStream
 import java.io.InputStream
 
-import LegaleaseLexer
-import LegaleaseParser
+import HapiLexer
+import HapiParser
 
 import utils.*
 
@@ -56,9 +56,9 @@ fun IR.Companion.generate(
   priority: List<String> ): ASTNode = 
   FileInputStream(file).let {
       val input = CharStreams.fromStream(it)
-      val lexer = LegaleaseLexer(input)
+      val lexer = HapiLexer(input)
       val tokens = CommonTokenStream(lexer)
-      val parser = LegaleaseParser(tokens)
+      val parser = HapiParser(tokens)
       val tree = parser.program()
 
       val eval = Visitor(file, priority)

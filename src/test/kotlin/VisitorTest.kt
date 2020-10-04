@@ -10,14 +10,14 @@ import org.antlr.v4.runtime.tree.ParseTree
 import java.io.FileInputStream
 import java.io.InputStream
 
-import legalease.*
+import hapi.*
   
 class VisitorTest {
   
     @Test
     @DisplayName("Should generate the correct IR")
     fun shouldGenerateTheCorrectIR() {
-      val file = "src/test/fixtures/visitor/Main.lgl"
+      val file = "src/test/fixtures/visitor/Main.hp"
       val priority = listOf("Actors", "Actions", "Resources")
 
       val ir = (IR.generate(file, priority) as IRNode).ir
@@ -30,7 +30,7 @@ class VisitorTest {
     @Test
     @DisplayName("Should receive wrong export name error")
     fun shouldReceiveWrongNameError() {
-      val file = "src/test/fixtures/wrong-name/Main.lgl"
+      val file = "src/test/fixtures/wrong-name/Main.hp"
       val priority = listOf("Actors", "Actions", "Resources")
       val exception = assertFailsWith<Exception> { IR.generate(file, priority) }
       assertEquals("undefined name: WrongName::bob", exception.message)
