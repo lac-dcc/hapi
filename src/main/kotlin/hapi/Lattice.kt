@@ -53,6 +53,11 @@ class Lattice(){
     return atoms
   }
 
+  public fun elements(): Set<String>{
+    return this.adj.keys
+  }
+
+
   override fun toString(): String {
         return this.adj.toString()
     }
