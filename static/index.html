@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <title>Legalease Demo!</title>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <h1>Inputs</h1>
+    <form class="row">
+      <div class="col-5">
+        <div class="form-group">
+          <label for="legalease">Legalease</label>
+          <textarea class="form-control" style="resize:none" id="legalease" rows="21"></textarea>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="row form-group">
+          <label for="actors">Actors</label>
+          <textarea class="form-control" id="actors" rows="5" style="resize:none"></textarea>
+        </div>
+        <div class="row form-group">
+          <label for="resources">Resources</label>
+          <textarea class="form-control" id="resources" rows="5" style="resize:none"></textarea>
+        </div>
+        <div class="row form-group">
+          <label for="actions">Actions</label>
+          <textarea class="form-control" id="actions" rows="5" style="resize:none"></textarea>
+        </div>
+      </div>
+      <div class="col-3">
+        <label for="queries">Queries</label>
+
+        <div class="form-group">
+          <select id="actorsQuerie" class="form-control">
+            <option disabled selected>Actors...</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <select id="resourcesQuerie" class="form-control">
+            <option disabled selected>Resources...</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <select id="actionsQuerie" class="form-control">
+            <option disabled selected>Actions...</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+            <label class="form-check-label" for="inlineRadio2">Legalease</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+            <label class="form-check-label" for="inlineRadio3">CVC4</label>
+          </div>
+        </div>
+
+        <button id="generate" formaction="/generate" class="btn btn-primary btn-block">Generate</button>
+        <button id="verify" formaction="/verify" class="btn btn-primary btn-block">Verify</button>
+
+      </div>
+    </form>
+
+    <h1>Output</h1>
+
+    <div class="row mb-5">
+      <div class="col-6">
+        <div class="form-group">
+          <label for="yaml">YAML</label>
+          <textarea class="form-control" style="resize:none" id="yaml" rows="21"></textarea>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="form-group">
+          <label for="matrix">Matrix</label>
+          <div id="matrix"></div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="row">
+          <div class="col">
+            <label for="actors">Actors</label>
+            <div id="actorsGraph"></div>
+          </div>
+          <div class="col">
+            <label for="resources">Resources</label>
+            <div id="resourcesGraph"></div>
+          </div>
+          <div class="col">
+            <label for="actions">Actions</label>
+            <div id="actionsGraph"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Jquery JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="/viz.js"></script>
+  <script src="/full-render.js"></script>
+  <script src="/index.js"></script>
+</body>
+
+</html>
+
+<!DOCTYPE html>
