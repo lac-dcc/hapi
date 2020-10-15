@@ -1,0 +1,29 @@
+import Syntax;
+
+// Caso teste- Erro de sintaxe 4:
+// A IR gerado não nega o acesso de Bob como
+// especificado no 'segundo EXCEPT'
+
+// Colocando EXCEPT {
+//            ALLOW {...} 
+//            EXCEPT{...}
+//           };
+// ... da forma hierarquica como estava,
+// ira aparecer um "line 22:4 extraneous input 'EXCEPT' expecting {'}', 'ALLOW'}"
+// Por isso as chaves estão fechando em lugares 'diferenciados' nessa politica.
+
+
+main =  
+  DENY
+  EXCEPT {
+    ALLOW {
+      Actors: Analyst
+      Resources
+      Actions
+    }};
+    EXCEPT 
+      DENY {
+        Actors: Bob
+        Resources: EMAIL
+        Actions: Deletes, Updates, Reads
+      };

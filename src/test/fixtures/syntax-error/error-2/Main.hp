@@ -1,0 +1,30 @@
+import Syntax;
+
+// Caso teste- Erro de sintaxe 2:
+// A IR gerado admite que a Actor Alice execute a Action Reads
+// no arquivo CCN, mesmo estando declarado DENY na variavel
+// 'alice'.
+// Isso deveria gerar um erro de Sintaxe ou gerar uma IR que negue
+// o acesso por Read de Alice ao CCN. Contudo, somente um aviso está sendo gerado:
+// "line 24:4 extraneous input 'DENY' expecting {'}', 'ALLOW'}"
+// Em adendo, mesmo se removermos o ALLOW abaixo, antes da variável
+// 'Syntax::alice', a linguagem ira interpretar que a query dentro
+// da variavel é ALLOWed.
+
+main =  
+  DENY
+  EXCEPT {
+    ALLOW {
+      Actors: Analyst
+      Resources
+      Actions
+    }
+    EXCEPT {
+      DENY {
+        Actors: Bob
+        Resources: EMAIL
+        Actions: Deletes, Updates, Reads
+      }
+    }
+    ALLOW Syntax::alice
+  };

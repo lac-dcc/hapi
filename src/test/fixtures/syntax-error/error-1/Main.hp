@@ -1,0 +1,16 @@
+import Syntax; 
+// Esse teste PASSA. (Baseado no WrongName)
+//Caso teste- Erro de sintaxe 1:
+// Deve retornar um erro devido ao nome do Actor dentro da
+// variavel jeff estar errado.
+
+main =  
+  DENY
+  EXCEPT {
+    ALLOW {
+      Actors: Analyst
+      Resources
+      Actions
+    }
+    ALLOW Syntax::jeff
+  };
