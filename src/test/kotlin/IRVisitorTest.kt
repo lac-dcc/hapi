@@ -20,7 +20,8 @@ class VisitorTest {
       val file = "src/test/fixtures/visitor/Main.hp"
       val priority = listOf("Actors", "Actions", "Resources")
 
-      val ir = (IR.generate(file, priority) as IRNode).ir
+      val datamap = genDataMap(file)
+      val ir = (genIR(file, datamap, priority) as IRNode).ir
 
       val validIRString = "{Bob={Updates=[SSN], Deletes=[SSN], Reads=[SSN]}, Alice={Updates=[SSN, CCN], Deletes=[SSN, EMAIL, CCN], Reads=[SSN, EMAIL, CCN]}}"
 
@@ -28,12 +29,16 @@ class VisitorTest {
     }
 
     @Test
-    @DisplayName("Should receive wrong export name error")
+    @DisplayName("Should receive name error when exporting a module different of filename")
     fun shouldReceiveWrongNameError() {
       val file = "src/test/fixtures/wrong-name/Main.hp"
       val priority = listOf("Actors", "Actions", "Resources")
-      val exception = assertFailsWith<Exception> { IR.generate(file, priority) }
-      assertEquals("undefined name: WrongName::bob", exception.message)
+      
+      val exception = assertFailsWith<Exception> { 
+        val datamap = genDataMap(file)
+        genIR(file, datamap, priority)
+      }
 
+      assertEquals("undefined name: WrongName::bob", exception.message)
     }
 }
