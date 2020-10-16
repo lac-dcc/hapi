@@ -36,16 +36,10 @@ $(document).ready(function () {
 
   $("#generate").click(function (e) {
 
-    const legalease = $('textarea#legalease').val();
-    const actors = $('textarea#actors').val();
-    const resources = $('textarea#resources').val();
-    const actions = $('textarea#actions').val();
+    const hapi = $('textarea#hapi').val();
 
     const data = {
-      legalease,
-      actors,
-      resources,
-      actions
+      hapi
     };
 
     post('generate', data).then(({ error, ...res }) => {
@@ -53,24 +47,12 @@ $(document).ready(function () {
         return alert(error);
       }
 
-      $("textarea#yaml").val(res.legalease);
+      $("textarea#yaml").val(res.yaml);
       genDot("actorsGraph", res.actors);
       genDot("resourcesGraph", res.resources);
       genDot("actionsGraph", res.actions);
 
-      const datamap = JSON.parse(res.datamap.replace(/'/g, '"'))["datamap"];
-
-      datamap["Actors"].forEach(actor => {
-        $("#actorsQuerie").append(new Option(actor, actor));
-      })
-      datamap["Resources"].forEach(resource => {
-        $("#resourcesQuerie").append(new Option(resource, resource));
-      })
-      datamap["Actions"].forEach(action => {
-        $("#actionsQuerie").append(new Option(action, action));
-      })
-
-      $("#matrix").load("output/legalease.html");
+      $("#matrix").load("output/main.html");
 
     });
 

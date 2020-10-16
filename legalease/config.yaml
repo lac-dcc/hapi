@@ -1,7 +1,0 @@
-inputFile: ../static/output/legalease.lgl
-outputDir: ../static/output
-priority: [Actors, Actions, Resources]
-datamap:
-  Actors: ../static/output/actors.yaml
-  Actions: ../static/output/actions.yaml
-  Resources: ../static/output/resources.yaml

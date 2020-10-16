@@ -1,0 +1,5 @@
+graph {
+	Top -- Reads;
+	Top -- Deletes;
+	Top -- Updates;
+}

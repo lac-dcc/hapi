@@ -4,16 +4,14 @@ const bodyParser = require('body-parser');
 const { exec } = require('child_process');
 const fs = require('fs');
 
-const program = "legalease/legalease.jar legalease/config.yaml";
-
 const outputDir = "static/output";
 
-const legaleaseFile = `${outputDir}/legalease.lgl`;
-const actorsFile = `${outputDir}/actors.yaml`;
-const resourcesFile = `${outputDir}/resources.yaml`;
-const actionsFile = `${outputDir}/actions.yaml`;
+const hapiFile = `${outputDir}/main.hp`;
 
-const resultLegaleaseFile = `${outputDir}/legalease.yaml`;
+// const program = "legalease/legalease.jar legalease/config.yaml";
+const program = `bin/hapi.jar ${hapiFile}`;
+
+const resultHapiFile = `${outputDir}/main.yaml`;
 const resultActorsFile = `${outputDir}/actors.dot`;
 const resultResourcesFile = `${outputDir}/resources.dot`;
 const resultActionsFile = `${outputDir}/actions.dot`;
@@ -33,12 +31,9 @@ app.post('/generate', jsonParser, function (req, res) {
     fs.mkdirSync(outputDir);
   }
 
-  const { legalease, actors, resources, actions } = req.body;
+  const { hapi } = req.body;
 
-  fs.writeFileSync(legaleaseFile, legalease);
-  fs.writeFileSync(actorsFile, actors);
-  fs.writeFileSync(resourcesFile, resources);
-  fs.writeFileSync(actionsFile, actions);
+  fs.writeFileSync(hapiFile, hapi);
 
   exec(`java -jar ${program}`,
     (error, stdout, stderr) => {
@@ -49,13 +44,13 @@ app.post('/generate', jsonParser, function (req, res) {
         return;
       }
 
-      const resultLegalease = fs.readFileSync(resultLegaleaseFile, "utf8");
+      const resultHapi = fs.readFileSync(resultHapiFile, "utf8");
       const resultActors = fs.readFileSync(resultActorsFile, "utf8");
       const resultResources = fs.readFileSync(resultResourcesFile, "utf8");
       const resultActions = fs.readFileSync(resultActionsFile, "utf8");
 
       res.json({
-        legalease: resultLegalease,
+        yaml: resultHapi,
         actors: resultActors,
         resources: resultResources,
         actions: resultActions,
