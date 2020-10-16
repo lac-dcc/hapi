@@ -57,6 +57,21 @@ class Lattice(){
     return this.adj.keys
   }
 
+  public fun dot_graph(): String{
+    var result: String = ""
+    
+    result += "graph {\n"
+
+    this.adj.forEach {
+      val parent = it.key;
+      it.value.forEach {
+        result += "\t${parent} -- ${it};\n"
+      }
+    }
+    result += "}\n"
+
+    return result
+  }
 
   override fun toString(): String {
         return this.adj.toString()

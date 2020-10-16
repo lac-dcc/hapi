@@ -126,3 +126,8 @@ task("matrix", JavaExec::class) {
     main = "tasks.MatrixPrinterKt"
     classpath = sourceSets["main"].runtimeClasspath
 }
+
+task("all-tools", JavaExec::class) {
+    main = "tasks.AllToolsKt"
+    classpath = sourceSets["main"].runtimeClasspath
+}

@@ -52,7 +52,6 @@ class MatrixPrinter {
 
   public fun populate_matrix(ir: IR){
     //transform the IR data in a matrix
-    println(ir)
     for((actor, actions) in (ir as NonTerminal).nonTerminal ){
       for ((action, _resources) in (actions as NonTerminal).nonTerminal){
         (_resources as Terminal).terminal.forEach{resource ->
