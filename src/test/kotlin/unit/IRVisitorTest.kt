@@ -1,6 +1,5 @@
 import kotlin.test.*
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -20,9 +19,9 @@ class IRVisitorTest {
       val datamap = genDataMap(file)
       val ir = (genIR(file, datamap, priority) as IRNode).ir
 
-      val validIRString = "{Bob={Updates=[SSN], Deletes=[SSN], Reads=[SSN]}, Alice={Updates=[SSN, CCN], Deletes=[SSN, EMAIL, CCN], Reads=[SSN, EMAIL, CCN]}}"
+      val expected = "{Bob={Updates=[SSN], Deletes=[SSN], Reads=[SSN]}, Alice={Updates=[SSN, CCN], Deletes=[SSN, EMAIL, CCN], Reads=[SSN, EMAIL, CCN]}}"
 
-      assertThat(ir.toString()).isEqualTo(validIRString)
+      assertThat(ir.toString()).isEqualTo(expected)
     }
 
     @Test
