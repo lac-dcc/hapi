@@ -7,12 +7,9 @@ import org.junit.jupiter.api.Test
 import org.antlr.v4.runtime.*
 import org.antlr.v4.runtime.tree.ParseTree
 
-import java.io.FileInputStream
-import java.io.InputStream
-
 import hapi.*
   
-class VisitorTest {
+class IRVisitorTest {
   
     @Test
     @DisplayName("Should generate the correct IR")
