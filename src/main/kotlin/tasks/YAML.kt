@@ -35,11 +35,13 @@ fun main(args: Array<String>) {
     return usage();
   }
 
+  val file = args[0]
   val priority = listOf("Actors", "Actions", "Resources")
-  val ast = IR.generate(args[0], priority) as IRNode
+  val datamap = genDataMap(file)
+  val ast = genIR(file, datamap, priority) as IRNode
   
-  val outputFile = changeExtension(args[0], "yaml")
+  val outputFile = changeExtension(file, "yaml")
 
   val yamlGenerator = YAMLGenerator();
-  yamlGenerator.generate(ast.ir, ast.dm, outputFile);
+  yamlGenerator.generate(ast.ir, datamap, outputFile);
 }

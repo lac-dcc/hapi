@@ -1,4 +1,4 @@
-package utils;
+package utils
 
 class ResultException(message: String) : Exception(message)
 
