@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test
 import org.antlr.v4.runtime.*
 import org.antlr.v4.runtime.tree.ParseTree
 
-import hapi.*
+import helpers.*
+
 class IRVisitorTest {
   
     @Test
@@ -15,10 +16,9 @@ class IRVisitorTest {
       val file = "src/test/fixtures/visitor/Main.hp"
       val priority = listOf("Actors", "Actions", "Resources")
 
-      val datamap = genDataMap(file)
-      val ir = (genIR(file, datamap, priority) as IRNode).ir
-
       val expected = "{Bob={Updates=[SSN], Deletes=[SSN], Reads=[SSN]}, Alice={Updates=[SSN, CCN], Deletes=[SSN, EMAIL, CCN], Reads=[SSN, EMAIL, CCN]}}"
+
+      val ir = irFromFile(file, priority)
 
       assertThat(ir.toString()).isEqualTo(expected)
     }
@@ -30,8 +30,7 @@ class IRVisitorTest {
       val priority = listOf("Actors", "Actions", "Resources")
       
       val exception = assertFailsWith<Exception> { 
-        val datamap = genDataMap(file)
-        genIR(file, datamap, priority)
+        irFromFile(file, priority)
       }
 
       assertEquals("undefined name: WrongName::bob", exception.message)

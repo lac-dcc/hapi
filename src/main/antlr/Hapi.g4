@@ -26,17 +26,23 @@ letStmt: ID '=' policyExpr ;
 policyExpr
   : denyExpr
   | allowExpr
-  | denyExceptExpr
-  | allowExceptExpr
   | denyAllExceptExpr
   | allowAllExceptExpr
   ;
 
-denyExpr: DENY attributeExpr ;
+denyExpr
+  : DENY attributeExpr 
+  | denyExceptExpr
+  ;
+
 denyExceptExpr: DENY attributeExpr EXCEPT '{' allowExpr+ '}';
 denyAllExceptExpr: DENY EXCEPT '{' allowExpr+ '}';
 
-allowExpr: ALLOW attributeExpr ;
+allowExpr
+  : ALLOW attributeExpr 
+  | allowExceptExpr
+  ;
+  
 allowExceptExpr: ALLOW attributeExpr EXCEPT '{' denyExpr+ '}';
 allowAllExceptExpr: ALLOW EXCEPT '{' denyExpr+ '}';
 
