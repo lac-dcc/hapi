@@ -1,14 +1,5 @@
 package hapi
 
-import org.antlr.v4.runtime.*
-import org.antlr.v4.runtime.tree.ParseTree
-
-import java.io.FileInputStream
-import java.io.InputStream
-
-import HapiLexer
-import HapiParser
-
 import utils.*
 
 sealed class IR {
@@ -50,20 +41,6 @@ fun IR.Companion.from(attrs: Map<String, Set<String>>, priority: List<String>): 
       })
     )
   }
-
-fun IR.Companion.generate(
-  file: String,
-  priority: List<String> ): ASTNode = 
-  FileInputStream(file).let {
-      val input = CharStreams.fromStream(it)
-      val lexer = HapiLexer(input)
-      val tokens = CommonTokenStream(lexer)
-      val parser = HapiParser(tokens)
-      val tree = parser.program()
-
-      val eval = Visitor(file, priority)
-      eval.visit(tree)
-    }
 
 fun Terminal.minus(other: Terminal): Result<Terminal, String> = 
   Ok(Terminal(this.terminal.subtract(other.terminal)))
