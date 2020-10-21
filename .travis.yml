@@ -4,8 +4,6 @@ os: linux
 dist: trusty
 jdk: oraclejdk8
 
-jdk:
-  - oraclejdk8
 before_install:
   - chmod +x gradlew
   - chmod +x gradle/wrapper/gradle-wrapper.jar
