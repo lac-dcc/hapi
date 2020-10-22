@@ -55,4 +55,23 @@ class ParsingTest {
     val error = "line 6:10 mismatched input 'INVALID' expecting 'ALLOW'"
     assertFailsWith<ParseCancellationException>(error) { parse(tokenize(program)) }
   }
+
+  @Test
+  @DisplayName("Should parse valid attribute expressions")
+  fun shouldParseValidAttributeExpression(){
+    val program =
+    """
+      data Prop = P1;
+
+      denyP1 = DENY {
+        Prop: P1
+      };
+      main =
+        ALLOW
+        EXCEPT {
+          denyP1
+        };
+    """
+    assertNotNull(parse(tokenize(program)))
+  }
 }

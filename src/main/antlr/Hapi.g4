@@ -24,32 +24,31 @@ dataStmt: DATA ID '=' dataElem (',' dataElem)* ;
 letStmt: ID '=' policyExpr ;
 
 policyExpr
-  : denyExpr
-  | allowExpr
-  | denyAllExceptExpr
+  : allowExpr
+  | denyExpr
   | allowAllExceptExpr
+  | denyAllExceptExpr
   ;
 
 denyExpr
-  : DENY attributeExpr 
+  : DENY attributeExpr
   | denyExceptExpr
+  | literalExpr
   ;
 
 denyExceptExpr: DENY attributeExpr EXCEPT '{' allowExpr+ '}';
 denyAllExceptExpr: DENY EXCEPT '{' allowExpr+ '}';
 
 allowExpr
-  : ALLOW attributeExpr 
+  : ALLOW attributeExpr
   | allowExceptExpr
+  | literalExpr
   ;
   
 allowExceptExpr: ALLOW attributeExpr EXCEPT '{' denyExpr+ '}';
 allowAllExceptExpr: ALLOW EXCEPT '{' denyExpr+ '}';
 
-attributeExpr
-  : '{' attribute+ '}'
-  | literalExpr
-  ;
+attributeExpr: '{' attribute+ '}' ;
 
 literalExpr: ID ('::' ID)? ;
 
