@@ -1,6 +1,4 @@
-export Syntax where
-
-//Arquivo utilizado somente para declarações
+export UndefinedAttribute where
 
 data Actors = 
   Looker(Analyst),
@@ -15,3 +13,9 @@ data Resources =
   Finance(Customers, Companies),
   Customers(CCN), Companies(EMAIL, SSN),
   CCN, EMAIL, SSN;
+
+jeff = ALLOW {
+        Actors: Jefa // Undefined attribute error
+        Resources: CCN
+        Actions: Reads
+      };

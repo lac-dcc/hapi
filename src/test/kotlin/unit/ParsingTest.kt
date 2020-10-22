@@ -55,4 +55,13 @@ class ParsingTest {
     val error = "line 6:10 mismatched input 'INVALID' expecting 'ALLOW'"
     assertFailsWith<ParseCancellationException>(error) { parse(tokenize(program)) }
   }
+
+  @Test
+  @DisplayName("Should return 'mismatched input' on syntax error: input 'DENY' expecting 'ALLOW' or 'EXCEPT'")
+  fun shouldReturnSyntaxErrorDenyExpectingAllow() {
+    val file = "src/test/fixtures/syntax-error/deny-expecting-allow/Main.hp"
+    val error = "line 24:4 mismatched input 'DENY' expecting 'ALLOW'"
+    assertFailsWith<ParseCancellationException>(error) { parse(tokenize(file)) }
+      
+  }
 }

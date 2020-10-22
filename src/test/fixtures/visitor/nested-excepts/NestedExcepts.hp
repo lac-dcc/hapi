@@ -1,4 +1,4 @@
-export Syntax where
+export NestedExcepts where
 
 data Actors = 
   Looker(Analyst),
@@ -13,9 +13,3 @@ data Resources =
   Finance(Customers, Companies),
   Customers(CCN), Companies(EMAIL, SSN),
   CCN, EMAIL, SSN;
-
-alice = DENY {
-        Actors: Alice
-        Resources: CCN
-        Actions: Reads
-      };
