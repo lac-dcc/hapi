@@ -23,11 +23,8 @@ class DataVisitorTest {
         """
       val expected = "{Actors={Top=[Looker, Intern], Looker=[Analyst], Analyst=[Alice, Bob], Alice=[], Bob=[], Intern=[Bob, Jeff], Jeff=[]}}"
       
-      val eval = DataVisitor("")
-
-      parseString(program).let {
-        val datamap = eval.visit(it)
-        assertThat(datamap.toString()).isEqualTo(expected)
+      evalDataMap(program, "").let {
+        assertThat(it.toString()).isEqualTo(expected)
       }
     }
 }

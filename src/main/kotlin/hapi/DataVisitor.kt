@@ -1,13 +1,15 @@
 package hapi
 
+import java.io.File
+
 import utils.*
 
-import HapiBaseVisitor
 import HapiParser
+import HapiBaseVisitor
 
 typealias DataMap = Map<String, Lattice>
 
-class DataVisitor(val file: String) : HapiBaseVisitor<DataMap>() {
+class DataVisitor(val root: String) : HapiBaseVisitor<DataMap>() {
 
   override fun visitExecutable(ctx: HapiParser.ExecutableContext): DataMap {
     return ctx.stmt().fold(mapOf(), {
@@ -22,10 +24,11 @@ class DataVisitor(val file: String) : HapiBaseVisitor<DataMap>() {
   }
 
   override fun visitImportStmt(ctx: HapiParser.ImportStmtContext): DataMap {
-    val module = ctx.ID().toString()
-    val file = changeFileName(this.file, module)
+    val module = this.root + "/" + ctx.ID().toString() + ".hp"
 
-    return genDataMap(file)
+    return File(module).let {
+      evalDataMap(it.readText(), this.root)
+    }
   }
 
   override fun visitDataStmt(ctx: HapiParser.DataStmtContext): DataMap {

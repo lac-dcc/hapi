@@ -7,35 +7,29 @@ import org.antlr.v4.runtime.*
 import org.antlr.v4.runtime.tree.ParseTree
 
 import hapi.*
+import helpers.*
   
 class EvaluationTest {
   
-    @Test
-    @DisplayName("Should evaluate to the correct IR even when defining Lattices after uses")
-    fun shouldEvaluateCorrectly() {
-      val program =
-        """
-        main =  
-          DENY
-          EXCEPT {
-            ALLOW {
-              Prop: P1
-            }
-          };
+  @Test
+  @DisplayName("Should evaluate to the correct IR even when defining Lattices after uses")
+  fun shouldEvaluateCorrectly() {
+    val program =
+      """
+      main =  
+        DENY
+        EXCEPT {
+          ALLOW {
+            Prop: P1
+          }
+        };
 
-        data Prop = P1, P2;
-        """
-      val expected = "IRNode(ir=[P1])"
+      data Prop = P1, P2;
+      """
+    val expected = "[P1]"
 
-      parseString(program).let {
+    val ir = irFromString(program, listOf("Prop"))
 
-        val dmEval = DataVisitor("")
-        val datamap = dmEval.visit(it)
-
-        val irEval = IRVisitor("", datamap, listOf("Prop"))
-        val ir = irEval.visit(it)
-
-        assertThat(ir.toString()).isEqualTo(expected)
-      }
-    }
+    assertThat(ir.toString()).isEqualTo(expected)
+  }
 }

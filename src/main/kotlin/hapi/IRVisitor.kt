@@ -1,5 +1,7 @@
 package hapi
 
+import java.io.File
+
 import utils.*
 
 import HapiBaseVisitor
@@ -14,7 +16,7 @@ data class EnvNode (val env: Environment): ASTNode() {}
 data class IRNode (val ir: IR): ASTNode() {}
 
 class IRVisitor(
-  val file: String,
+  val root: String,
   val datamap: DataMap,
   val priority: List<String>    // @TODO: think of a way to remove this
   ) : HapiBaseVisitor<ASTNode>() {
@@ -65,15 +67,15 @@ class IRVisitor(
   }
 
   override fun visitImportStmt(ctx: HapiParser.ImportStmtContext): ASTNode {
-    val module = ctx.ID().toString()
+    val module = this.root + "/" + ctx.ID().toString() + ".hp"
 
-    val file = changeFileName(this.file, module)
+    return File(module).let {
+      val ast = evalIR(it.readText(), this.root, this.datamap, this.priority)
 
-    val ast = genIR(file, this.datamap, this.priority)
-
-    return when (ast) {
-      is EnvNode -> ast
-      else -> throw Exception("can't import an executable file")
+      when (ast) {
+        is EnvNode -> ast
+        else -> throw Exception("can't import an executable file")
+      }
     }
   }
 
