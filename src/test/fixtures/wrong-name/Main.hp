@@ -3,5 +3,5 @@ import WrongName;
 main =  
   ALLOW
   EXCEPT {
-    DENY WrongName::bob
+    WrongName::bob
   };

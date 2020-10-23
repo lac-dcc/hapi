@@ -87,34 +87,33 @@ class IRVisitor(
     return EnvNode(env)
   }
 
-  fun getIRfromLiteralExpr(literalExpr: HapiParser.LiteralExprContext): IR {
+  fun inferTypeFrom(ruleIndex: Int): IRType {
+    if (ruleIndex == HapiParser.RULE_allowExpr || ruleIndex == HapiParser.RULE_allowExceptExpr)
+      return IRType.ALLOW
+    else
+      return IRType.DENY
+  }
 
-    var literal = literalExpr.ID().map {e -> e.toString()}.toMutableList()
+  override fun visitAttributeExpr(ctx: HapiParser.AttributeExprContext): ASTNode {
+    val type =  inferTypeFrom(ctx.getParent().getRuleIndex())
+    return IRNode(IR.from(attrsFrom(ctx.attribute()), type, this.priority))
+  }
+
+  override fun visitLiteralExpr(ctx: HapiParser.LiteralExprContext): ASTNode {
+    var literal = ctx.ID().map {e -> e.toString()}.toMutableList()
     if (literal.size == 1)
       literal.add(0, this.namespace)
     
     val name = literal.joinToString(separator="::")
-
     val ir = this.env.get(name)
 
     if (ir != null)
-      return ir
+      return IRNode(ir)
     else
       throw Exception("undefined name: ${name}")
   }
 
-  override fun visitAttributeExpr(ctx: HapiParser.AttributeExprContext): ASTNode {
-    val literal = ctx.literalExpr()
-    val ir =  if (literal != null)
-                getIRfromLiteralExpr(literal)
-              else
-                IR.from(attrsFrom(ctx.attribute()), this.priority)
-
-    return IRNode(ir)
-  }
-
   override fun visitDenyExceptExpr(ctx: HapiParser.DenyExceptExprContext): ASTNode {
-
     val denyAttr = visit(ctx.attributeExpr())
     val denyAttrIR = (denyAttr as IRNode).ir
 
@@ -125,9 +124,13 @@ class IRVisitor(
   }
 
   override fun visitDenyAllExceptExpr(ctx: HapiParser.DenyAllExceptExprContext): ASTNode {
+
+    val top = this.datamap.mapValues { setOf<String>() }
+    val topIR = IR.from(top, IRType.ALLOW, this.priority)
+    
     val ir = ctx.allowExpr()
               .map{(visit(it) as IRNode).ir}
-              .reduce({ acc, ir -> acc.plus(ir).unwrap() })
+              .fold(topIR, { acc, ir -> acc.plus(ir).unwrap() })
     return IRNode(ir)
   }
 
@@ -145,7 +148,7 @@ class IRVisitor(
   override fun visitAllowAllExceptExpr(ctx: HapiParser.AllowAllExceptExprContext): ASTNode {
 
     val top = this.datamap.mapValues { (_, lattice) -> lattice.atoms(lattice.TOP) }
-    val topIR = IR.from(top, this.priority)
+    val topIR = IR.from(top, IRType.ALLOW, this.priority)
 
     val ir = ctx.denyExpr()
             .map{(visit(it) as IRNode).ir}
