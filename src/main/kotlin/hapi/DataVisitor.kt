@@ -19,7 +19,7 @@ class DataVisitor(val root: String) : HapiBaseVisitor<DataMap>() {
 
   override fun visitLibrary(ctx: HapiParser.LibraryContext ): DataMap {
     return ctx.stmt().fold(mapOf(), {
-      datamap, stmt -> visit(stmt).let { if (it != null) datamap + it else datamap}
+      datamap, stmt -> visit(stmt).let { if(it != null) datamap + it else datamap}
     })
   }
 

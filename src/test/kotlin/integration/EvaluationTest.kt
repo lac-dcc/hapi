@@ -28,7 +28,34 @@ class EvaluationTest {
       """
     val expected = "[P1]"
 
-    val ir = irFromString(program, listOf("Prop"))
+    val ir = irFromString(program)
+
+    assertThat(ir.toString()).isEqualTo(expected)
+  }
+
+  @Test
+  @DisplayName("Should consider the order of the definition of lattices when generating the IR")
+  fun shouldConsiderOrder() {
+    val program =
+      """
+      data P = P1;
+      data K = K1;
+      data E = E1;
+
+      main =  
+        DENY
+        EXCEPT {
+          ALLOW {
+            P: P1
+            K: K1
+            E: E1
+          }
+        };
+
+      """
+    val expected = "{P1={K1=[E1]}}"
+
+    val ir = irFromString(program)
 
     assertThat(ir.toString()).isEqualTo(expected)
   }
