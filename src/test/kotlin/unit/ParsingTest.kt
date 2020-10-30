@@ -39,7 +39,7 @@ class ParsingTest {
   }
 
   @Test
-  @DisplayName("Should throw ParseCancellationException on syntax rrror")
+  @DisplayName("Should throw ParseCancellationException on syntax error")
   fun shouldThrowParseCancellationExceptionOnSyntaxError(){
     val program =
       """
@@ -62,7 +62,8 @@ class ParsingTest {
     val file = "src/test/fixtures/syntax-error/deny-expecting-allow/Main.hp"
     val error = "line 24:4 mismatched input 'DENY' expecting 'ALLOW'"
     assertFailsWith<ParseCancellationException>(error) { parse(tokenize(file)) }
-      
+  }
+
   @Test
   @DisplayName("Should parse valid attribute expressions")
   fun shouldParseValidAttributeExpression(){

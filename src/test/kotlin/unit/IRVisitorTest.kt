@@ -117,8 +117,10 @@ class IRVisitorTest {
     fun shouldDenyBobActionsOnEmail() {
       val file = "src/test/fixtures/visitor/nested-excepts/Main.hp"
       val priority = listOf("Actors", "Actions", "Resources")
+      val castelo = "teste"
       val ir = irFromFile(file, priority)
       val expectedIRString = "{Bob={Updates=[SSN, CCN], Deletes=[SSN, CCN], Reads=[SSN, CCN]}, Alice={Updates=[SSN, EMAIL, CCN], Deletes=[SSN, EMAIL, CCN], Reads=[SSN, EMAIL, CCN]}}"
       assertThat(ir.toString()).isEqualTo(expectedIRString)
     }
+  }
 }
