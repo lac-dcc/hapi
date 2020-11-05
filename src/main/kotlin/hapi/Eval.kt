@@ -41,8 +41,8 @@ fun evalDataMap(source: String, root: String): DataMap =
     eval.visit(it)
   }
 
-fun evalIR(source: String, root: String, datamap: DataMap, priority: List<String>): ASTNode = 
+fun evalIR(source: String, root: String, datamap: DataMap): ASTNode = 
   parse(tokenize(source)).let {
-    val eval = IRVisitor(root, datamap, priority)
+    val eval = IRVisitor(root, datamap)
     eval.visit(it)
   }

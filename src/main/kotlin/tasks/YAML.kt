@@ -36,14 +36,12 @@ fun main(args: Array<String>) {
   }
 
   val file = args[0]
-  val priority = listOf("Actors", "Actions", "Resources")
-
 
   File(file).let {
     val root = getDirName(file)
     val source = it.readText()
     val datamap = evalDataMap(source, root)
-    val ast = evalIR(source, root, datamap, priority) as IRNode
+    val ast = evalIR(source, root, datamap) as IRNode
 
     val outputFile = changeExtension(file, "yaml")
 
