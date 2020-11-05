@@ -4,30 +4,36 @@ import java.util.Stack
 
 import utils.*
 
-class Lattice(){
-
+class Lattice() {
   val TOP = "⊤"
   val BOTTOM = "⊥"
-  private var adj: MutableMap<String, MutableSet<String>> = mutableMapOf(this.TOP to mutableSetOf())
+  var adj: MutableMap<String, MutableSet<String>> = mutableMapOf(this.TOP to mutableSetOf())
 
-  fun append(parent: String, elem: String) {
-    val parentElem = this.adj[parent]
-    if (parentElem != null){
+  override fun toString(): String {
+    return this.adj.toString()
+  }
+}
+
+fun Lattice.append(parent: String, elem: String) =
+  this.adj[parent].let{
+    if (it != null){
       
       if (!this.adj.containsKey(elem))
         this.adj.put(elem, mutableSetOf())
 
-      parentElem.add(elem)
+      it.add(elem)
     }
   }
 
-  fun contains(elem: String): Boolean {
+fun Lattice.contains(elem: String): Boolean =
+  run {
     var found = false
     this.dfs(TOP, {node, _ -> found = found || elem == node})
-    return found
+    found
   }
 
-  fun dfs(label: String, closure: (String, MutableSet<String>?) -> Unit) {
+fun Lattice.dfs(label: String, closure: (String, MutableSet<String>?) -> Unit) =
+  run {
     val stack = Stack<String>()
     val visited = mutableSetOf<String>()
 
@@ -45,8 +51,8 @@ class Lattice(){
     }
   }
 
-  fun atoms(label: String): Result<MutableSet<String>, String> {
-
+fun Lattice.atoms(label: String): Result<MutableSet<String>, String> =
+  run {
     if (!this.adj.containsKey(label))
       return Err("undefined value ${label}")
 
@@ -57,10 +63,5 @@ class Lattice(){
         atoms.add(node)
       })
 
-    return Ok(atoms)
+    Ok(atoms)
   }
-
-  override fun toString(): String {
-        return this.adj.toString()
-    }
-}
