@@ -28,15 +28,13 @@ class IRVisitor(
     return this.priority.associateWith({
       attr -> 
         val ctx = ctxs.firstOrNull{ it.ID().toString() == attr }
-        if (ctx != null){
-          if (ctx.value().isEmpty()) { // attribute has no value -> top of the lattice
-            datamap[attr]!!.atoms(datamap[attr]!!.TOP)
-          }else{
-            ctx.value().flatMap{ datamap[attr]!!.atoms(it.ID().toString()) }.toSet()
-          }
-        }else{ // clausule has no such attribute -> empty set
+        if (ctx != null)
+          if (ctx.value().isEmpty()) // attribute has no value -> top of the lattice
+            datamap[attr]!!.atoms(datamap[attr]!!.TOP).unwrap()
+          else
+            ctx.value().flatMap{ datamap[attr]!!.atoms(it.ID().toString()).unwrap()}.toSet()
+        else // clausule has no such attribute -> empty set
           setOf<String>()
-        }
     })
   }
 
@@ -95,6 +93,9 @@ class IRVisitor(
   }
 
   override fun visitAttributeExpr(ctx: HapiParser.AttributeExprContext): ASTNode {
+    if (!datamap.containsKey(ctxs.attribute().ID()))
+      throw Exception("undefined attribute ${ctxs.attribute().ID()}")
+
     val type =  inferTypeFrom(ctx.getParent().getRuleIndex())
     return IRNode(IR.from(attrsFrom(ctx.attribute()), type, this.priority))
   }

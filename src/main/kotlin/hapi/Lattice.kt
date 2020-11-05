@@ -1,7 +1,8 @@
 package hapi
 
-import java.io.File
 import java.util.Stack
+
+import utils.*
 
 class Lattice(){
 
@@ -43,14 +44,19 @@ class Lattice(){
     }
   }
 
-  fun atoms(label: String): MutableSet<String> {
+  fun atoms(label: String): Result<MutableSet<String>, String> {
+
+    if (!this.adj.containsKey(label))
+      return Err("undefined value ${label}")
+
     val atoms: MutableSet<String> = mutableSetOf()
     dfs(label, {
       node, neigh ->
       if(neigh.isNullOrEmpty()) 
         atoms.add(node)
       })
-    return atoms
+
+    return Ok(atoms)
   }
 
   override fun toString(): String {
