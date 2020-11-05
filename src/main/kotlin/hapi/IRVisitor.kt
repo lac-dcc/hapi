@@ -27,15 +27,13 @@ class IRVisitor(
     return this.datamap.keys.associateWith({
       attr -> 
         val ctx = ctxs.firstOrNull{ it.ID().toString() == attr }
-        if (ctx != null){
-          if (ctx.value().isEmpty()) { // attribute has no value -> top of the lattice
+        if (ctx != null)
+          if (ctx.value().isEmpty()) // attribute has no value -> top of the lattice
             datamap[attr]!!.atoms(datamap[attr]!!.TOP)
-          }else{
+          else
             ctx.value().flatMap{ datamap[attr]!!.atoms(it.ID().toString()) }.toSet()
-          }
-        }else{ // clausule has no such attribute -> empty set
-          setOf<String>()
-        }
+        else // clausule has no such attribute -> empty set
+          setOf<String>(datamap[attr]!!.BOTTOM)
     })
   }
 
