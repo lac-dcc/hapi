@@ -32,6 +32,10 @@ dependencies {
     // Use the Kotlin JUnit integration.
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 
+    // Use HEML manipulator for matrix printer
+    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-html-js:0.7.1")
+
     antlr("org.antlr:antlr4:4.8")
     
     testImplementation("io.mockk:mockk:1.9.3")
@@ -118,3 +122,26 @@ tasks.test {
     })
 }
 
+task("matrix", JavaExec::class) {
+    main = "tasks.MatrixPrinterKt"
+    classpath = sourceSets["main"].runtimeClasspath
+}
+
+task("all-tools", JavaExec::class) {
+    main = "tasks.AllToolsKt"
+    classpath = sourceSets["main"].runtimeClasspath
+}
+
+task("build-all-tools", type = Jar::class) {
+    manifest {
+        attributes(mapOf("Main-Class" to "tasks.AllToolsKt"))
+    }
+
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from ({ 
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+    baseName = project.name
+}

@@ -65,3 +65,23 @@ fun Lattice.atoms(label: String): Result<MutableSet<String>, String> =
 
     Ok(atoms)
   }
+
+  fun Lattice.elements(): Set<String>{
+    return this.adj.keys
+  }
+
+  fun Latice.dot_graph(): String{
+    var result: String = ""
+    
+    result += "graph {\n"
+
+    this.adj.forEach {
+      val parent = it.key;
+      it.value.forEach {
+        result += "\t${parent} -- ${it};\n"
+      }
+    }
+    result += "}\n"
+
+    return result
+  }
