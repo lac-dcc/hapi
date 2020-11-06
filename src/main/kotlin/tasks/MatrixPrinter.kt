@@ -7,6 +7,7 @@ import java.io.FileInputStream
 import java.io.InputStream
 import java.io.OutputStreamWriter
 import java.io.FileOutputStream
+import java.io.File
 
 import kotlinx.html.*
 import kotlinx.html.dom.*
@@ -131,16 +132,19 @@ fun main(args: Array<String>){
     return usage();
   }
 
-  val priority = listOf("Actors", "Actions", "Resources")
-  val irNode = (IR.generate(args[0], priority) as IRNode)
+  val filepath = args[0]
+  val sourceFile = File(filepath)
+  val root = getDirName(filepath)
+  val sourceText = sourceFile.readText()
+  val datamap = evalDataMap(sourceText, root)
+  val irNode = evalIR(sourceText, root, datamap) as IRNode
 
-  val outputFile = changeExtension(args[0], "html")
+  val actorsDataMap = datamap.getValue("Actors")
+  val resourcesDataMap = datamap.getValue("Resources")
 
-  val actors = irNode.dm.getValue("Actors").elements()
-  val resources = irNode.dm.getValue("Resources").elements()
-
-  val matrix = MatrixPrinter(actors, resources);
-
+  // generate matrix
+  val matrixOutputFile = changeExtension(filepath, "html")
+  val matrix = MatrixPrinter(actorsDataMap.elements(), resourcesDataMap.elements())
   matrix.populate_matrix(irNode.ir)
-  matrix.generate_html_file(outputFile)
+  matrix.generate_html_file(matrixOutputFile)
 }

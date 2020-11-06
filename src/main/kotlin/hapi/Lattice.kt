@@ -70,7 +70,7 @@ fun Lattice.atoms(label: String): Result<MutableSet<String>, String> =
     return this.adj.keys
   }
 
-  fun Latice.dot_graph(): String{
+  fun Lattice.dot_graph(): String{
     var result: String = ""
     
     result += "graph {\n"
