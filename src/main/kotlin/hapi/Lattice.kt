@@ -5,7 +5,8 @@ import java.util.Stack
 
 class Lattice(){
 
-  val TOP = "Top"
+  val TOP = "⊤"
+  val BOTTOM = "⊥"
   private var adj: MutableMap<String, MutableSet<String>> = mutableMapOf(this.TOP to mutableSetOf())
 
   fun append(parent: String, elem: String) {

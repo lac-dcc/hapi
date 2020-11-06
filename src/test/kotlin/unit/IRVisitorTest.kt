@@ -14,11 +14,10 @@ class IRVisitorTest {
   @DisplayName("Should generate the correct IR")
   fun shouldGenerateTheCorrectIR() {
     val file = "src/test/fixtures/visitor/Main.hp"
-    val priority = listOf("Actors", "Actions", "Resources")
 
     val expected = "{Bob={Updates=[SSN], Deletes=[SSN], Reads=[SSN]}, Alice={Updates=[SSN, CCN], Deletes=[SSN, EMAIL, CCN], Reads=[SSN, EMAIL, CCN]}}"
 
-    val ir = irFromFile(file, priority)
+    val ir = irFromFile(file)
 
     assertThat(ir.toString()).isEqualTo(expected)
   }
@@ -27,9 +26,8 @@ class IRVisitorTest {
   @DisplayName("Should receive name error when exporting a module different of filename")
   fun shouldReceiveWrongNameError() {
     val file = "src/test/fixtures/wrong-name/Main.hp"
-    val priority = listOf("Actors", "Actions", "Resources")
     
-    val exception = assertFailsWith<Exception> { irFromFile(file, priority) }
+    val exception = assertFailsWith<Exception> { irFromFile(file) }
     assertEquals("undefined name: WrongName::bob", exception.message)
   }
 
@@ -85,7 +83,7 @@ class IRVisitorTest {
       "expected type ALLOW got DENY"
     )
     for (i in 0 until programs.size){
-      val exception = assertFailsWith<Exception>{ irFromString(programs.get(i), listOf("Prop")) }
+      val exception = assertFailsWith<Exception>{ irFromString(programs.get(i)) }
       assertEquals(messages.get(i), exception.message)
     }
   }

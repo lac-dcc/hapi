@@ -43,12 +43,12 @@ fun IR.plus(otherIR: IR): Result<IR, String> =
     else -> Err("Can't sum IRs of different nesting levels")
   }
 
-fun IR.Companion.from(attrs: Map<String, Set<String>>, type: IRType, priority: List<String>): IR =
-  when (priority.size) {
-    1 -> Terminal(attrs[priority[0]]!!, type)
+fun IR.Companion.from(attrs: Map<String, Set<String>>, type: IRType, keys: List<String>): IR =
+  when (keys.size) {
+    1 -> Terminal(attrs[keys[0]]!!, type)
     else -> NonTerminal(
-      attrs[priority[0]]!!.associateWith({
-        IR.from(attrs, type, priority.drop(1)) 
+      attrs[keys[0]]!!.associateWith({
+        IR.from(attrs, type, keys.drop(1)) 
       }), type
     )
   }
