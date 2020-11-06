@@ -8,7 +8,7 @@ import org.antlr.v4.runtime.tree.ParseTree
 
 import hapi.*
 import helpers.*
-  
+
 class EvaluationTest {
 
   @Test
@@ -90,7 +90,7 @@ class EvaluationTest {
     assertThat(ir2.toString()).isEqualTo(e2)
   }
 
-    @Test
+  @Test
   @DisplayName("Should throw undefined value and attribute error")
   fun shouldThrowUndefinedError() {
     val program = { attr: String ->
@@ -106,7 +106,6 @@ class EvaluationTest {
             ${attr}
           }
         };
-
       """
     }
 
