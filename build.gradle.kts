@@ -131,3 +131,17 @@ task("all-tools", JavaExec::class) {
     main = "tasks.AllToolsKt"
     classpath = sourceSets["main"].runtimeClasspath
 }
+
+task("build-all-tools", type = Jar::class) {
+    manifest {
+        attributes(mapOf("Main-Class" to "tasks.AllToolsKt"))
+    }
+
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from ({ 
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+    baseName = project.name
+}
