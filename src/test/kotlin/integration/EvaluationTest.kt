@@ -8,9 +8,9 @@ import org.antlr.v4.runtime.tree.ParseTree
 
 import hapi.*
 import helpers.*
-  
+
 class EvaluationTest {
-  
+
   @Test
   @DisplayName("Should evaluate to the correct IR even when defining Lattices after uses")
   fun shouldEvaluateCorrectly() {
@@ -88,5 +88,31 @@ class EvaluationTest {
 
     assertThat(ir1.toString()).isEqualTo(e1)
     assertThat(ir2.toString()).isEqualTo(e2)
+  }
+
+  @Test
+  @DisplayName("Should throw undefined value and attribute error")
+  fun shouldThrowUndefinedError() {
+    val program = { attr: String ->
+      """
+      data P = P1;
+      data K = K1;
+
+      main =  
+        DENY
+        EXCEPT {
+          ALLOW {
+            P: P1
+            ${attr}
+          }
+        };
+      """
+    }
+
+    val e1 = assertFailsWith<Exception>{ irFromString(program("K: K2")) }
+    assertEquals("undefined value K2", e1.message)
+
+    val e2 = assertFailsWith<Exception>{ irFromString(program("L: L1")) }
+    assertEquals("undefined attribute L", e2.message)
   }
 }

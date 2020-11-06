@@ -29,9 +29,9 @@ class IRVisitor(
         val ctx = ctxs.firstOrNull{ it.ID().toString() == attr }
         if (ctx != null)
           if (ctx.value().isEmpty()) // attribute has no value -> top of the lattice
-            datamap[attr]!!.atoms(datamap[attr]!!.TOP)
+            datamap[attr]!!.atoms(datamap[attr]!!.TOP).unwrap()
           else
-            ctx.value().flatMap{ datamap[attr]!!.atoms(it.ID().toString()) }.toSet()
+            ctx.value().flatMap{ datamap[attr]!!.atoms(it.ID().toString()).unwrap()}.toSet()
         else // clausule has no such attribute -> empty set
           setOf<String>(datamap[attr]!!.BOTTOM)
     })
@@ -92,6 +92,12 @@ class IRVisitor(
   }
 
   override fun visitAttributeExpr(ctx: HapiParser.AttributeExprContext): ASTNode {
+
+    ctx.attribute().forEach {
+      if (!this.datamap.containsKey(it.ID().toString()))
+        throw Exception("undefined attribute ${it.ID()}")
+    }
+
     val type =  inferTypeFrom(ctx.getParent().getRuleIndex())
     return IRNode(IR.from(attrsFrom(ctx.attribute()), type, this.datamap.keys.toList()))
   }
@@ -144,7 +150,7 @@ class IRVisitor(
 
   override fun visitAllowAllExceptExpr(ctx: HapiParser.AllowAllExceptExprContext): ASTNode {
 
-    val top = this.datamap.mapValues { (_, lattice) -> lattice.atoms(lattice.TOP) }
+    val top = this.datamap.mapValues { (_, lattice) -> lattice.atoms(lattice.TOP).unwrap()}
     val topIR = IR.from(top, IRType.ALLOW, this.datamap.keys.toList())
 
     val ir = ctx.denyExpr()
