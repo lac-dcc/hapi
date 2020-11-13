@@ -1,9 +1,0 @@
-graph {
-	Top -- Claims;
-	Claims -- Finance;
-	Finance -- Customers;
-	Finance -- Companies;
-	Customers -- CCN;
-	Companies -- EMAIL;
-	Companies -- SSN;
-}

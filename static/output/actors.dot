@@ -1,9 +1,0 @@
-graph {
-	Top -- Looker;
-	Top -- Intern;
-	Looker -- Analyst;
-	Analyst -- Alice;
-	Analyst -- Bob;
-	Intern -- Bob;
-	Intern -- Jeff;
-}
