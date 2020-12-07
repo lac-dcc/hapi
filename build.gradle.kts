@@ -36,6 +36,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.1")
     implementation("org.jetbrains.kotlinx:kotlinx-html-js:0.7.1")
 
+    implementation("com.google.code.gson:gson:2.8.5")
+
     antlr("org.antlr:antlr4:4.8")
     
     testImplementation("io.mockk:mockk:1.9.3")

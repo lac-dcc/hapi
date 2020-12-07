@@ -8,6 +8,7 @@ import java.io.InputStream
 import java.io.OutputStreamWriter
 import java.io.FileOutputStream
 import java.io.File
+import java.io.FileWriter
 
 import kotlinx.html.*
 import kotlinx.html.dom.*
@@ -17,6 +18,9 @@ import javax.xml.transform.OutputKeys
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.transform.stream.StreamResult
 import javax.xml.transform.dom.DOMSource
+
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 
 class MatrixPrinter {
   private val resources: Map<String, Int>
@@ -132,6 +136,9 @@ fun main(args: Array<String>){
     return usage();
   }
 
+  val gson = Gson()
+	val gsonPretty = GsonBuilder().setPrettyPrinting().create()
+
   val filepath = args[0]
   val sourceFile = File(filepath)
   val root = getDirName(filepath)
@@ -142,9 +149,48 @@ fun main(args: Array<String>){
   val actorsDataMap = datamap.getValue("Actors")
   val resourcesDataMap = datamap.getValue("Resources")
 
-  // generate matrix
+  // generate matrix 
   val matrixOutputFile = changeExtension(filepath, "html")
   val matrix = MatrixPrinter(actorsDataMap.elements(), resourcesDataMap.elements())
+  val jsonTutsArrayPretty: String = gsonPretty.toJson(matrix)
   matrix.populate_matrix(irNode.ir)
   matrix.generate_html_file(matrixOutputFile)
+
+  //val jsonTutsArrayPretty: String = gsonPretty.toJson(matrix)
+  val arraymatrix = Array<Array<Map<String, Int>>>
+  val aux = Array<Array<Map<String, Int>>>
+  for (actor in indexed_actors){
+    for(resource in indexed_resources){
+      aux = $actor($resource)
+    }
+             {
+              th {+indexed_actors[i]}
+              for (j in 0..(matrix[i].size)-1){
+                val cell = matrix[i][j]
+                td {
+                  p{+"Reads: ${cell["Reads"]}"}
+                  p{+"Updates: ${cell["Updates"]}"}
+                  p{+"Deletes: ${cell["Deletes"]}"}
+                }
+              }
+            }
+          }
+          
+    for (i in 0..(matrix.size)-1){
+            tr {
+              th {+indexed_actors[i]}
+              for (j in 0..(matrix[i].size)-1){
+                val cell = matrix[i][j]
+                td {
+                  p{+"Reads: ${cell["Reads"]}"}
+                  p{+"Updates: ${cell["Updates"]}"}
+                  p{+"Deletes: ${cell["Deletes"]}"}
+                }
+              }
+            }
+          }
+
+  val jsonmatrix = FileWriter("test.json")
+  jsonmatrix.write(jsonTutsArrayPretty)
+  jsonmatrix.close()
 }
