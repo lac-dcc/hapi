@@ -10,89 +10,185 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-  <title>Hapi Demo!</title>
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+
+  <!-- Font-->
+  <link rel="stylesheet" type="text/css" href="css/opensans-font.css">
+  <link rel="stylesheet" type="text/css" href="fonts/line-awesome/css/line-awesome.min.css">
+
+  <!-- favicon -->
+  <link rel="icon" type="image/svg" href="new-logo.svg">
+
+
+  <title>Hapi Visualizer</title>
 </head>
 
 <body>
-  <div class="container-fluid">
-    <h1>Inputs</h1>
-    <form class="row">
-      <div class="col-8">
-        <div class="form-group">
-          <label for="hapi">Hapi</label>
-          <textarea class="form-control" style="resize:none" id="hapi" rows="21"></textarea>
+  
+  <div class="container-fluid h-98">
+    <div class="row justify-content-center header">
+      <div class="rounded"> 
+        <img src="new-logo.svg" class="logo-header" alt="My image"/>
+      </div>
+    </div>
+    <div class="row h-90">
+      <div class="container col-11 h-100">
+        <div class="row h-100">
+          <div class="col-lg-8 write-code mh-100">
+            <h2>MAIN</h2>
+            <form class="h-75">
+              <div class="form-group h-100">
+                <fieldset id="file-main" class="disabled" disabled>
+                  <div class="col-12 upload-main">
+                    <div class="row">
+                      <div class="col" id="drop-main">
+                        <div class="row d-flex justify-content-between align-items-center" id="filename-row">
+                          
+                        </div>
+                      </div>
+                      <div class="col-3" style="min-width:100px; max-width: 180px;">
+                        <label class="btn btn-primary btn-block" id="browse-main">
+                          Browse&hellip; <input type="file" id="customFile2" style="display: none;">
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+                <textarea id="code" class="form-control" rows="12"
+                 placeholder="or Type your Hapi code..."> </textarea>
+                 <div class="row mt-2 justify-content-end">
+                   <div class= "col toggle-text" id="fileInput">
+                      Use file input
+                   </div>
+                   <div class= "toggle">
+                    <label class="switch">
+                      <input type="checkbox" id="toggle-main-code" checked>
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                  <div class= "col toggle-text selected" id="typeCode">
+                    Typing code
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div> 
+          <div class="col-lg-4 submit-code">
+            <div class="row no-gutters">
+              <h2>IMPORT FILES</h2>
+              <div class="col">
+                <a class="btn btn-sm btn-primary collapsed" id="collapse-button" data-toggle="collapse" href="#drop-zone-collapse" role="button"></a>
+              </div>
+            </div>
+
+            <div class="collapse" id="drop-zone-collapse">
+              <div class="row">
+                <div class="col-10">
+                  <span></span>
+                </div>
+                <div class="col-2">
+                  <span id="counter">0/5</span>
+                </div>
+              </div>
+              <div class="row justify-content-center">
+                <div class="col-11 upload-drop-zone" id="drop-zone">
+                  <ul class="list-group list-group-flush" id="upload-list">
+  
+                  </ul>
+                  <form>
+                    <div class="form-row justify-content-end">
+                      <div class="col-auto" id="label-drop">
+                          Drop
+                      </div>
+                      <div class="col-auto" id="label-or">
+                          or
+                      </div>
+                      <div class="col-auto" id="browse">
+                        <label class="btn btn-primary mb-2" id="browse-button">
+                          Browse&hellip; <input type="file" id="customFile" style="display: none;" multiple>
+                        </label>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div class="row form-row-last justify-content-end submit-buttons">
+              <input type="button" name="register" id="preview" class="disabled" value="Preview" data-toggle="modal" data-target="#exampleModalLong" disabled>
+              <input type="button" name="register" id="generate" value="Generate">
+            </div>
+          </div>
         </div>
       </div>
-      <div class="col-3">
-        <!-- <label for="queries">Queries</label>
-
-        <div class="form-group">
-          <select id="actorsQuerie" class="form-control">
-            <option disabled selected>Actors...</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <select id="resourcesQuerie" class="form-control">
-            <option disabled selected>Resources...</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <select id="actionsQuerie" class="form-control">
-            <option disabled selected>Actions...</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-            <label class="form-check-label" for="inlineRadio2">Legalease</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
-            <label class="form-check-label" for="inlineRadio3">CVC4</label>
-          </div>
-        </div> -->
-
-        <button id="generate" formaction="/generate" class="btn btn-primary btn-block">Generate</button>
-        <!-- <button id="verify" formaction="/verify" class="btn btn-primary btn-block">Verify</button> -->
-
+    </div>
+  </div>
+  <div class="justify-content-center overlay" id="load-overlay">
+    <div class="spanner">
+      <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
       </div>
-    </form>
-
-    <h1>Output</h1>
-
-    <div class="row mb-5">
-      <div class="col-6">
-        <div class="form-group">
-          <label for="yaml">YAML</label>
-          <textarea class="form-control" style="resize:none" id="yaml" rows="21"></textarea>
+    </div>
+  </div>
+  <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg w-100" role="document">
+      <div class="modal-content h-100">
+        <div class="modal-header">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="home-tab" data-toggle="tab" href="#yaml" role="tab" aria-controls="home" aria-selected="true">YAML</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="profile-tab" data-toggle="tab" href="#matrix" role="tab" aria-controls="profile" aria-selected="false">Matrix</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="contact-tab" data-toggle="tab" href="#lattices" role="tab" aria-controls="contact" aria-selected="false">Lattices</a>
+            </li>
+          </ul>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-      </div>
-      <div class="col-6">
-        <div class="form-group">
-          <label for="matrix">Matrix</label>
-          <div id="matrix"></div>
-        </div>
-      </div>
-      <div class="col-12">
-        <div class="row">
-          <div class="col">
-            <label for="actors">Actors</label>
-            <div id="actorsGraph"></div>
-          </div>
-          <div class="col">
-            <label for="resources">Resources</label>
-            <div id="resourcesGraph"></div>
-          </div>
-          <div class="col">
-            <label for="actions">Actions</label>
-            <div id="actionsGraph"></div>
+        <div class="modal-body h-100" style="overflow: auto">
+          <div class="tab-content h-100" id="myTabContent">
+            <div class="tab-pane fade show active" id="yaml" role="tabpanel" aria-labelledby="home-tab">
+              <textarea id="yaml-code" class="form-control" rows="12" disabled> </textarea>
+            </div>
+            <div class="tab-pane fade" id="matrix" role="tabpanel" aria-labelledby="profile-tab">Matrix</div>
+            <div class="tab-pane fade" id="lattices" role="tabpanel" aria-labelledby="contact-tab">
+              <div class="row justify-content-center">
+                <div class="">
+                  <label for="actors">Actors</label>
+                  <div id="actorsGraph"></div>
+                </div>
+                <div class="">
+                  <label for="resources">Resources</label>
+                  <div id="resourcesGraph"></div>
+                </div>
+                <div class="">
+                  <label for="actions">Actions</label>
+                  <div id="actionsGraph"></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
+    </div>
+  </div>
+  <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="ErrorModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ErrorModalTitle">ERROR</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <textarea id="error-message" class="form-control" rows="10" disabled style="resize: none; width: 100%;"> </textarea>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -100,7 +196,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="/viz.js"></script>
   <script src="/full-render.js"></script>
-  <script src="/index.js"></script>
+  <script src="index.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </body>
 
 </html>
