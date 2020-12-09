@@ -22,12 +22,13 @@ update_jar () {
   gradle build-all-tools --no-daemon
 
   cd $DIR
+  mkdir -p bin
   mv hapi/build/libs/* bin/
 }
 
 from_scratch () {
   cd $DIR
-  rm yes | rm -r hapi
+  yes | rm -r hapi
   git clone https://github.com/lac-dcc/hapi.git
   cd hapi
   git checkout -b visualizer origin/visualizer
