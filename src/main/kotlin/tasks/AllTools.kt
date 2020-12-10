@@ -5,8 +5,8 @@ import utils.*
 
 import java.io.File
 
-fun main(args: Array<String>){
-  if (args.size < 1){
+fun main(args: Array<String>) {
+  if (args.size < 1) {
     return usage();
   }
   val filepath = args[0]
@@ -23,9 +23,8 @@ fun main(args: Array<String>){
   // generate matrix
   val matrixOutputFile = changeExtension(filepath, "html")
   val matrix = MatrixPrinter(actorsDataMap.elements(), resourcesDataMap.elements())
-  matrix.populate_matrix(irNode.ir)
-  matrix.generate_html_file(matrixOutputFile)
-
+  matrix.populateMatrix(irNode.ir)
+  matrix.generateHtmlFile(matrixOutputFile)
 
   // generate .dot files
   val actionsDot = relativePath(filepath, "actions.dot")
