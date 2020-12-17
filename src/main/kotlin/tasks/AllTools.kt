@@ -5,6 +5,15 @@ import utils.*
 
 import java.io.File
 
+/**
+ * In a single function block, runs all serialization tools currently supported.
+ * This is called by the gradle task "all-tools" and "build-all-tools", and as
+ * of now, is used mainly by Hapi Visualizer as a facilitator.
+ *
+ * @param args the Hapi policy file name. The output serialized files shall have
+ *             the same root name (everything but the extension), including the
+ *             specified directory.
+ */
 fun main(args: Array<String>) {
   if (args.size < 1) {
     return usage();
@@ -20,13 +29,17 @@ fun main(args: Array<String>) {
   val actorsDataMap = datamap.getValue("Actors")
   val resourcesDataMap = datamap.getValue("Resources")
 
-  // generate matrix
-  val matrixOutputFile = changeExtension(filepath, "html")
+  // matrix creation
   val matrix = MatrixPrinter(actorsDataMap.elements(), resourcesDataMap.elements())
   matrix.populateMatrix(irNode.ir)
-  matrix.generateHtmlFile(matrixOutputFile)
 
-  // generate .dot files
+  // generates HTML and JSON
+  var matrixOutputFile = changeExtension(filepath, "html")
+  matrix.generateHtmlFile(matrixOutputFile)
+  matrixOutputFile = changeExtension(filepath, "json")
+  matrix.generateJsonFile(matrixOutputFile)
+
+  // generates .dot files
   val actionsDot = relativePath(filepath, "actions.dot")
   var file = File(actionsDot);
   file.bufferedWriter().use { out ->
@@ -45,7 +58,7 @@ fun main(args: Array<String>) {
     out.write(resourcesDataMap.dot_graph());
   }
 
-  // generate Yaml
+  // generates YAML
   val yamlOutputFile = changeExtension(filepath, "yaml")
   val yamlGenerator = YAMLGenerator();
   yamlGenerator.generate(irNode.ir, datamap, yamlOutputFile);
