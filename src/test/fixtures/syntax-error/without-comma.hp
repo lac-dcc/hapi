@@ -1,0 +1,11 @@
+import LatticesDeclaration;
+
+main =  
+  ALLOW 
+  EXCEPT {
+    DENY {
+        Actors: Bob
+        Resources: EMAIL
+        Actions: Deletes
+    }
+  };

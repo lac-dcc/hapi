@@ -9,22 +9,11 @@ import java.io.InputStream
 import HapiLexer
 import HapiParser
 
-val errorListener = object : BaseErrorListener() {
-  override fun syntaxError(
-    recognizer: Recognizer<*, *>?,
-    offendingSymbol: Any?,
-    line: Int,
-    charPositionInLine: Int,
-    message: String,
-    e: RecognitionException?
-  ) = throw ParseCancellationException("line " + line + ":" + charPositionInLine + " " + message)
-}
-
 fun tokenize(source: String): CommonTokenStream =
   CharStreams.fromString(source).let {
     val lexer = HapiLexer(it).apply {
       removeErrorListeners()
-      addErrorListener(errorListener)
+      addErrorListener(HapiSyntaxErrorListener())
     }
     CommonTokenStream(lexer)
   }
@@ -32,7 +21,7 @@ fun tokenize(source: String): CommonTokenStream =
 fun parse(tokens: CommonTokenStream): HapiParser.ProgramContext =
   HapiParser(tokens).apply {
     removeErrorListeners()
-    addErrorListener(errorListener)
+    addErrorListener(HapiSyntaxErrorListener())
   }.program()
 
 fun evalDataMap(source: String, root: String): DataMap = 
