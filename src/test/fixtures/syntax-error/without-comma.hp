@@ -1,6 +1,6 @@
 import LatticesDeclaration;
 
-mai =  
+main =  
   ALLOW 
   EXCEPT {
     DENY {
@@ -8,4 +8,5 @@ mai =
         Resources: EMAIL
         Actions: Deletes
     }
+    
   };

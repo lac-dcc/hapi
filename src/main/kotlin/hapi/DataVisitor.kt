@@ -4,6 +4,7 @@ import java.io.File
 import java.io.FileNotFoundException
 
 import utils.*
+import hapi.error.*
 
 import HapiParser
 import HapiBaseVisitor
@@ -29,7 +30,7 @@ class DataVisitor(val root: String) : HapiBaseVisitor<DataMap>() {
     return File(module).let {
       if (!it.exists()){
         val message = "Module \"${ctx.ID()}\" does not exist"
-        HapiErrorListener.runtimeError(ctx.ID(), message)
+        throw HapiRuntimeException(ctx.ID(), message)
       } 
       evalDataMap(it.readText(), this.root)
     }

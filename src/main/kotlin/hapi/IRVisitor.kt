@@ -3,6 +3,7 @@ package hapi
 import java.io.File
 
 import utils.*
+import hapi.error.*
 
 import HapiBaseVisitor
 import HapiParser
@@ -34,8 +35,7 @@ class IRVisitor(
             try {
               ctx.value().flatMap{datamap[attr]!!.atoms(it.ID().toString()).unwrap()}.toSet()
             } catch (e:Exception){
-              HapiErrorListener.runtimeError(ctx.ID(), e.toString())
-              setOf<String>(datamap[attr]!!.BOTTOM)
+              throw HapiRuntimeException(ctx.ID(), e.toString())
             }
         else // clausule has no such attribute -> empty set
           setOf<String>(datamap[attr]!!.BOTTOM)
@@ -53,7 +53,7 @@ class IRVisitor(
     if (main != null)
       return IRNode(main)
     else
-      HapiErrorListener.throwError(0, 0, "no entry point 'main' provided")
+      throw HapiRuntimeException("no entry point 'main' provided")
   }
 
   override fun visitLibrary(ctx: HapiParser.LibraryContext ): ASTNode {
@@ -76,7 +76,8 @@ class IRVisitor(
 
       when (ast) {
         is EnvNode -> ast
-        else -> throw Exception("can't import an executable file")
+        else -> throw HapiRuntimeException(ctx.ID(), 
+          "can't import an executable file")
       }
     }
   }
@@ -101,7 +102,7 @@ class IRVisitor(
     ctx.attribute().forEach {
       if (!this.datamap.containsKey(it.ID().toString())){
         val message = "Undefined attribute \"${it.ID()}\""
-        HapiErrorListener.runtimeError(it.ID(), message)
+        throw HapiRuntimeException(it.ID(), message)
       }
     }
 
@@ -120,8 +121,7 @@ class IRVisitor(
     if (ir != null)
       return IRNode(ir)
     else
-      throw Exception("undefined name: ${name}")
-      // throw HapiRunTimeError(ctx.ID(), "undefined name: ${name}")
+      throw HapiRuntimeException(ctx.ID().component1(), "undefined name: ${name}")
   }
 
   override fun visitDenyExceptExpr(ctx: HapiParser.DenyExceptExprContext): ASTNode {
