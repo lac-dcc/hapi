@@ -1,0 +1,44 @@
+Exception in thread "main" java.lang.Exception: undefined attribute Ators
+	at hapi.IRVisitor.visitAttributeExpr(IRVisitor.kt:98)
+	at hapi.IRVisitor.visitAttributeExpr(IRVisitor.kt:18)
+	at HapiParser$AttributeExprContext.accept(HapiParser.java:991)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visitChildren(AbstractParseTreeVisitor.java:46)
+	at HapiBaseVisitor.visitDenyExpr(HapiBaseVisitor.java:82)
+	at HapiParser$DenyExprContext.accept(HapiParser.java:607)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visit(AbstractParseTreeVisitor.java:18)
+	at hapi.IRVisitor.visitAllowAllExceptExpr(IRVisitor.kt:157)
+	at hapi.IRVisitor.visitAllowAllExceptExpr(IRVisitor.kt:18)
+	at HapiParser$AllowAllExceptExprContext.accept(HapiParser.java:931)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visitChildren(AbstractParseTreeVisitor.java:46)
+	at HapiBaseVisitor.visitPolicyExpr(HapiBaseVisitor.java:75)
+	at HapiParser$PolicyExprContext.accept(HapiParser.java:537)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visit(AbstractParseTreeVisitor.java:18)
+	at hapi.IRVisitor.visitLetStmt(IRVisitor.kt:82)
+	at hapi.IRVisitor.visitLetStmt(IRVisitor.kt:18)
+	at HapiParser$LetStmtContext.accept(HapiParser.java:488)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visitChildren(AbstractParseTreeVisitor.java:46)
+	at HapiBaseVisitor.visitStmt(HapiBaseVisitor.java:40)
+	at HapiParser$StmtContext.accept(HapiParser.java:288)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visit(AbstractParseTreeVisitor.java:18)
+	at hapi.IRVisitor.visitExecutable(IRVisitor.kt:42)
+	at hapi.IRVisitor.visitExecutable(IRVisitor.kt:18)
+	at HapiParser$ExecutableContext.accept(HapiParser.java:231)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visitChildren(AbstractParseTreeVisitor.java:46)
+	at HapiBaseVisitor.visitProgram(HapiBaseVisitor.java:19)
+	at HapiParser$ProgramContext.accept(HapiParser.java:116)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visit(AbstractParseTreeVisitor.java:18)
+	at hapi.EvalKt.evalIR(Eval.kt:36)
+	at tasks.YAMLKt.main(YAML.kt:44)
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':run'.
+> Process 'command '/usr/lib/jvm/java-11-openjdk-amd64/bin/java'' finished with non-zero exit value 1
+
+* Try:
+Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output. Run with --scan to get full insights.
+
+* Get more help at https://help.gradle.org
+
+BUILD FAILED in 759ms

@@ -31,7 +31,12 @@ class IRVisitor(
           if (ctx.value().isEmpty()) // attribute has no value -> top of the lattice
             datamap[attr]!!.atoms(datamap[attr]!!.TOP).unwrap()
           else
-            ctx.value().flatMap{ datamap[attr]!!.atoms(it.ID().toString()).unwrap()}.toSet()
+            try {
+              ctx.value().flatMap{datamap[attr]!!.atoms(it.ID().toString()).unwrap()}.toSet()
+            } catch (e:Exception){
+              HapiErrorListener.runtimeError(ctx.ID(), e.toString())
+              setOf<String>(datamap[attr]!!.BOTTOM)
+            }
         else // clausule has no such attribute -> empty set
           setOf<String>(datamap[attr]!!.BOTTOM)
     })
@@ -48,7 +53,7 @@ class IRVisitor(
     if (main != null)
       return IRNode(main)
     else
-      throw Exception("no entry point 'main' provided")
+      HapiErrorListener.throwError(0, 0, "no entry point 'main' provided")
   }
 
   override fun visitLibrary(ctx: HapiParser.LibraryContext ): ASTNode {
@@ -94,8 +99,10 @@ class IRVisitor(
   override fun visitAttributeExpr(ctx: HapiParser.AttributeExprContext): ASTNode {
 
     ctx.attribute().forEach {
-      if (!this.datamap.containsKey(it.ID().toString()))
-        throw Exception("undefined attribute ${it.ID()}")
+      if (!this.datamap.containsKey(it.ID().toString())){
+        val message = "Undefined attribute \"${it.ID()}\""
+        HapiErrorListener.runtimeError(it.ID(), message)
+      }
     }
 
     val type =  inferTypeFrom(ctx.getParent().getRuleIndex())
@@ -114,6 +121,7 @@ class IRVisitor(
       return IRNode(ir)
     else
       throw Exception("undefined name: ${name}")
+      // throw HapiRunTimeError(ctx.ID(), "undefined name: ${name}")
   }
 
   override fun visitDenyExceptExpr(ctx: HapiParser.DenyExceptExprContext): ASTNode {

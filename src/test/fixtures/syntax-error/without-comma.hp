@@ -1,6 +1,6 @@
 import LatticesDeclaration;
 
-main =  
+mai =  
   ALLOW 
   EXCEPT {
     DENY {

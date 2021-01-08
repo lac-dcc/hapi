@@ -13,7 +13,7 @@ fun tokenize(source: String): CommonTokenStream =
   CharStreams.fromString(source).let {
     val lexer = HapiLexer(it).apply {
       removeErrorListeners()
-      addErrorListener(HapiSyntaxErrorListener())
+      addErrorListener(HapiErrorListener())
     }
     CommonTokenStream(lexer)
   }
@@ -21,7 +21,7 @@ fun tokenize(source: String): CommonTokenStream =
 fun parse(tokens: CommonTokenStream): HapiParser.ProgramContext =
   HapiParser(tokens).apply {
     removeErrorListeners()
-    addErrorListener(HapiSyntaxErrorListener())
+    addErrorListener(HapiErrorListener())
   }.program()
 
 fun evalDataMap(source: String, root: String): DataMap = 
