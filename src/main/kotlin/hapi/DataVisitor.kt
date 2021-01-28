@@ -29,7 +29,7 @@ class DataVisitor(val root: String) : HapiBaseVisitor<DataMap>() {
     val module = this.root + "/" + ctx.ID().toString() + ".hp"
     return File(module).let {
       if (!it.exists()){
-        val message = "Module \"${ctx.ID()}\" does not exist"
+        val message = "Module '${ctx.ID()}' does not exist"
         throw HapiRuntimeException(ctx.ID(), message)
       } 
       evalDataMap(it.readText(), this.root)

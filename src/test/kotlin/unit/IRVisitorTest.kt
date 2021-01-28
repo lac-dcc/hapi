@@ -28,7 +28,7 @@ class IRVisitorTest {
     val file = "src/test/fixtures/wrong-name/Main.hp"
     
     val exception = assertFailsWith<Exception> { irFromFile(file) }
-    assertEquals("undefined name: WrongName::bob", exception.message)
+    assertEquals("line 6:4 undefined name: WrongName::bob", exception.message)
   }
 
   @Test
@@ -78,9 +78,9 @@ class IRVisitorTest {
       """
     )
     val messages = listOf(
-      "expected type ALLOW got DENY",
-      "expected type DENY got ALLOW",
-      "expected type ALLOW got DENY"
+      "line 10:10 denyP1 is a DENY expression, expected ALLOW",
+      "line 10:10 allowP1 is an ALLOW expression, expected DENY",
+      "line 14:10 denyP1 is a DENY expression, expected ALLOW"
     )
     for (i in 0 until programs.size){
       val exception = assertFailsWith<Exception>{ irFromString(programs.get(i)) }

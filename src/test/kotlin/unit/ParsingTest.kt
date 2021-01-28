@@ -39,7 +39,7 @@ class ParsingTest {
   }
 
   @Test
-  @DisplayName("Should throw ParseCancellationException on syntax rrror")
+  @DisplayName("Should throw ParseCancellationException on syntax error")
   fun shouldThrowParseCancellationExceptionOnSyntaxError(){
     val program =
       """
@@ -72,5 +72,45 @@ class ParsingTest {
         };
     """
     assertNotNull(parse(tokenize(program)))
+  }
+
+  @Test
+  @DisplayName("Invalid import statement - without comma")
+  fun invalidSyntaxWithoutComma(){
+    val program =
+    """
+      import somemodule
+
+      data Prop = P1;
+
+      denyP1 = DENY {
+        Prop: P1
+      };
+      main =
+        ALLOW
+        EXCEPT {
+          denyP1
+        };
+    """
+    val error = "line 4:6 missing ';' at 'data'"
+    val e1 = assertFailsWith<ParseCancellationException>{parse(tokenize(program))}
+    assertEquals(error, e1.message)
+  }
+
+  @Test
+  @DisplayName("Invalid EXCEPT - without parenthesis")
+  fun invalidSyntaxWithoutParenthesis(){
+    val program =
+    """
+      data Prop = P1;
+      main =
+        ALLOW
+        EXCEPT 
+          denyP1
+        };
+    """
+    val error = "line 6:10 missing '{' at 'denyP1'"
+    val e1 = assertFailsWith<ParseCancellationException>{parse(tokenize(program))}
+    assertEquals(error, e1.message)
   }
 }
