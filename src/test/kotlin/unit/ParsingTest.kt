@@ -75,7 +75,7 @@ class ParsingTest {
   }
 
   @Test
-  @DisplayName("Invalid import statement - without comma")
+  @DisplayName("Invalid import statement - missing comma")
   fun invalidSyntaxWithoutComma(){
     val program =
     """
@@ -98,7 +98,7 @@ class ParsingTest {
   }
 
   @Test
-  @DisplayName("Invalid EXCEPT - without parenthesis")
+  @DisplayName("Invalid EXCEPT - missing curly braces")
   fun invalidSyntaxWithoutParenthesis(){
     val program =
     """
