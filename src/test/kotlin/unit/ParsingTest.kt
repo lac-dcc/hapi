@@ -76,7 +76,7 @@ class ParsingTest {
 
   @Test
   @DisplayName("Invalid import statement - missing comma")
-  fun invalidSyntaxWithoutComma(){
+  fun invalidSyntaxMissingComma(){
     val program =
     """
       import somemodule
@@ -99,7 +99,7 @@ class ParsingTest {
 
   @Test
   @DisplayName("Invalid EXCEPT - missing curly braces")
-  fun invalidSyntaxWithoutParenthesis(){
+  fun invalidSyntaxMissingBraces(){
     val program =
     """
       data Prop = P1;
