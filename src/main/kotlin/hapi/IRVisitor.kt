@@ -3,6 +3,7 @@ package hapi
 import java.io.File
 
 import utils.*
+import hapi.error.*
 
 import HapiBaseVisitor
 import HapiParser
@@ -31,7 +32,11 @@ class IRVisitor(
           if (ctx.value().isEmpty()) // attribute has no value -> top of the lattice
             datamap[attr]!!.atoms(datamap[attr]!!.TOP).unwrap()
           else
-            ctx.value().flatMap{ datamap[attr]!!.atoms(it.ID().toString()).unwrap()}.toSet()
+            try {
+              ctx.value().flatMap{datamap[attr]!!.atoms(it.ID().toString()).unwrap()}.toSet()
+            } catch (e:Exception){
+              throw HapiRuntimeException(ctx.ID(), (e.message!!))
+            }
         else // clausule has no such attribute -> empty set
           setOf<String>(datamap[attr]!!.BOTTOM)
     })
@@ -48,7 +53,7 @@ class IRVisitor(
     if (main != null)
       return IRNode(main)
     else
-      throw Exception("no entry point 'main' provided")
+      throw HapiRuntimeException("no entry point 'main' provided")
   }
 
   override fun visitLibrary(ctx: HapiParser.LibraryContext ): ASTNode {
@@ -71,7 +76,8 @@ class IRVisitor(
 
       when (ast) {
         is EnvNode -> ast
-        else -> throw Exception("can't import an executable file")
+        else -> throw HapiRuntimeException(ctx.ID(), 
+          "can't import an executable file")
       }
     }
   }
@@ -94,8 +100,10 @@ class IRVisitor(
   override fun visitAttributeExpr(ctx: HapiParser.AttributeExprContext): ASTNode {
 
     ctx.attribute().forEach {
-      if (!this.datamap.containsKey(it.ID().toString()))
-        throw Exception("undefined attribute ${it.ID()}")
+      if (!this.datamap.containsKey(it.ID().toString())){
+        val message = "Undefined attribute \"${it.ID()}\""
+        throw HapiRuntimeException(it.ID(), message)
+      }
     }
 
     val type =  inferTypeFrom(ctx.getParent().getRuleIndex())
@@ -113,7 +121,7 @@ class IRVisitor(
     if (ir != null)
       return IRNode(ir)
     else
-      throw Exception("undefined name: ${name}")
+      throw HapiRuntimeException(ctx.ID().component1(), "undefined name: ${name}")
   }
 
   override fun visitDenyExceptExpr(ctx: HapiParser.DenyExceptExprContext): ASTNode {
@@ -121,19 +129,31 @@ class IRVisitor(
     val denyAttrIR = (denyAttr as IRNode).ir
 
     val ir = ctx.allowExpr()
-            .map{(visit(it) as IRNode).ir}
-            .fold(denyAttrIR, { acc, ir -> acc.minus(ir).unwrap() })
+            .map{
+              val result = (visit(it) as IRNode).ir
+              if(result.type != IRType.ALLOW)
+                  throw HapiRuntimeException(it.getStart(), 
+                    "${it.getStart().getText()} is a DENY expression, expected ALLOW")
+              else
+                result
+            }.fold(denyAttrIR, { acc, ir -> acc.minus(ir).unwrap() })
     return IRNode(ir)
   }
-
+  
   override fun visitDenyAllExceptExpr(ctx: HapiParser.DenyAllExceptExprContext): ASTNode {
 
     val top = this.datamap.mapValues { setOf<String>() }
     val topIR = IR.from(top, IRType.ALLOW, this.datamap.keys.toList())
     
     val ir = ctx.allowExpr()
-              .map{(visit(it) as IRNode).ir}
-              .fold(topIR, { acc, ir -> acc.plus(ir).unwrap() })
+            .map{
+              val result = (visit(it) as IRNode).ir
+              if(result.type != IRType.ALLOW)
+                  throw HapiRuntimeException(it.getStart(), 
+                    "${it.getStart().getText()} is a DENY expression, expected ALLOW")
+              else
+                result
+            }.fold(topIR, { acc, ir -> acc.plus(ir).unwrap()})
     return IRNode(ir)
   }
 
@@ -143,8 +163,14 @@ class IRVisitor(
     val allowAttrIR = (allowAttr as IRNode).ir
 
     val ir = ctx.denyExpr()
-            .map{(visit(it) as IRNode).ir}
-            .fold(allowAttrIR, { acc, ir -> acc.minus(ir).unwrap() })
+            .map{
+              val result = (visit(it) as IRNode).ir
+              if(result.type != IRType.DENY)
+                  throw HapiRuntimeException(it.getStart(), 
+                    "${it.getStart().getText()} is an ALLOW expression, expected DENY")
+              else
+                result
+            }.fold(allowAttrIR, { acc, ir -> acc.minus(ir).unwrap()})
     return IRNode(ir)
   }
 
@@ -154,9 +180,14 @@ class IRVisitor(
     val topIR = IR.from(top, IRType.ALLOW, this.datamap.keys.toList())
 
     val ir = ctx.denyExpr()
-            .map{(visit(it) as IRNode).ir}
-            .fold(topIR, { acc, ir -> acc.minus(ir).unwrap() })
-
+            .map{
+              val result = (visit(it) as IRNode).ir
+              if(result.type != IRType.DENY)
+                  throw HapiRuntimeException(it.getStart(), 
+                    "${it.getStart().getText()} is an ALLOW expression, expected DENY")
+              else
+                result
+            }.fold(topIR, { acc, ir -> acc.minus(ir).unwrap() })
     return IRNode(ir)
   }
 }

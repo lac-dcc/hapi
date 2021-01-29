@@ -1,8 +1,10 @@
 package hapi
 
 import java.io.File
+import java.io.FileNotFoundException
 
 import utils.*
+import hapi.error.*
 
 import HapiParser
 import HapiBaseVisitor
@@ -25,8 +27,11 @@ class DataVisitor(val root: String) : HapiBaseVisitor<DataMap>() {
 
   override fun visitImportStmt(ctx: HapiParser.ImportStmtContext): DataMap {
     val module = this.root + "/" + ctx.ID().toString() + ".hp"
-
     return File(module).let {
+      if (!it.exists()){
+        val message = "Module '${ctx.ID()}' does not exist"
+        throw HapiRuntimeException(ctx.ID(), message)
+      } 
       evalDataMap(it.readText(), this.root)
     }
   }
