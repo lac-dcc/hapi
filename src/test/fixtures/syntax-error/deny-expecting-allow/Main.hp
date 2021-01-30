@@ -1,0 +1,12 @@
+import Syntax;
+
+main =  
+  DENY
+  EXCEPT {
+    ALLOW {
+      Actors: Analyst
+      Resources
+      Actions
+    }
+    DENY Syntax::alice
+  };

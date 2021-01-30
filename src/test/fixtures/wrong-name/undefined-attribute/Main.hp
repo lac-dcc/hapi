@@ -1,0 +1,12 @@
+import UndefinedAttribute; 
+
+main =  
+  DENY
+  EXCEPT {
+    ALLOW {
+      Actors: Analyst
+      Resources
+      Actions
+    }
+    ALLOW Syntax::jeff
+  };

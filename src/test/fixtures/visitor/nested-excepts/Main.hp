@@ -1,0 +1,18 @@
+import NestedExcepts;
+
+main =  
+  DENY
+  EXCEPT {
+    ALLOW {
+      Actors: Analyst
+      Resources
+      Actions
+    }
+    EXCEPT {
+      DENY {
+        Actors: Bob
+        Resources: EMAIL
+        Actions: Deletes, Updates, Reads
+      }
+    }  
+  };

@@ -86,5 +86,39 @@ class IRVisitorTest {
       val exception = assertFailsWith<Exception>{ irFromString(programs.get(i)) }
       assertEquals(messages.get(i), exception.message)
     }
+
+    @Test
+    @DisplayName("Should receive an undefined attribute error")
+    fun shouldReceiveUndefinedAttributeError() {
+      val file = "src/test/fixtures/wrong-name/undefined-attribute/Main.hp"
+      val priority = listOf("Actors", "Actions", "Resources")
+      val exception = assertFailsWith<Exception> { irFromFile(file, priority) }
+      assertEquals("undefined attribute: Syntax::jeff::Actors = Jefa", exception.message)
+    }
+
+    @Test
+    @DisplayName("Should return a syntax error on imported variable: DENY after an ALLOW")
+    fun shouldReturnSyntaxErrorImportedVariable() {
+      val file = "src/test/fixtures/syntax-error/imported-variable/Main.hp"
+      val priority = listOf("Actors", "Actions", "Resources")
+      
+      val exception = assertFailsWith<Exception> { 
+        irFromFile(file, priority)
+      }
+
+      assertEquals("line 29:10 syntax error 'DENY' after an 'ALLOW'", exception.message)
+
+    }
+
+    @Test
+    @DisplayName("Should generate the correct IR even with multiple 'EXCEPT' nested")
+    fun shouldDenyBobActionsOnEmail() {
+      val file = "src/test/fixtures/visitor/nested-excepts/Main.hp"
+      val priority = listOf("Actors", "Actions", "Resources")
+      val castelo = "teste"
+      val ir = irFromFile(file, priority)
+      val expectedIRString = "{Bob={Updates=[SSN, CCN], Deletes=[SSN, CCN], Reads=[SSN, CCN]}, Alice={Updates=[SSN, EMAIL, CCN], Deletes=[SSN, EMAIL, CCN], Reads=[SSN, EMAIL, CCN]}}"
+      assertThat(ir.toString()).isEqualTo(expectedIRString)
+    }
   }
 }
