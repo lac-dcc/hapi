@@ -12,7 +12,7 @@ class YAMLGenerator {
 
     file.bufferedWriter().use { out ->
       val resources = datamap["Resources"]!!;
-      out.write("data: ${resources.atoms(resources.TOP)}\n");
+      out.write("data: ${resources.atoms(resources.TOP).unwrap()}\n");
 
       out.write("rules:\n");
 
