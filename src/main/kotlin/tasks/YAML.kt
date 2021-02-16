@@ -40,7 +40,10 @@ fun main(args: Array<String>) {
   File(file).let {
     val root = getDirName(file)
     val source = it.readText()
+    
     val datamap = evalDataMap(source, root)
+    check3D(datamap) // Check that datamap has right keys
+    
     val ast = evalIR(source, root, datamap) as IRNode
 
     val outputFile = changeExtension(file, "yaml")
