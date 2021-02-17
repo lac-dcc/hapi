@@ -42,7 +42,7 @@ fun main(args: Array<String>) {
     val source = it.readText()
     
     val datamap = evalDataMap(source, root)
-    check3D(datamap) // Check that datamap has right keys
+    Check3D(datamap) // Check that datamap has right keys
     
     val ast = evalIR(source, root, datamap) as IRNode
 
