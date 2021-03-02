@@ -8,6 +8,8 @@ import utils.*
 class YAMLGenerator {
 
   fun generate(ir: IR, datamap: DataMap, filename: String) {
+    DataMapOrderChecker(datamap) // Check that datamap has right keys
+      
     val file = File(filename);
 
     file.bufferedWriter().use { out ->
@@ -42,7 +44,6 @@ fun main(args: Array<String>) {
     val source = it.readText()
     
     val datamap = evalDataMap(source, root)
-    Check3D(datamap) // Check that datamap has right keys
     
     val ast = evalIR(source, root, datamap) as IRNode
 
