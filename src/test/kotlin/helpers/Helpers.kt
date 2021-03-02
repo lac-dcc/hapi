@@ -23,7 +23,7 @@ fun irFromString(source: String) : IR =
   }
 
 /* Generates YAML translation of Hapi program from "file"
- * Returns the name of the resulting translation
+ * Returns the resulting translation's file path
  */
 fun yamlFromFile(file: String) : String =
   File(file).let {
