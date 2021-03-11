@@ -14,12 +14,14 @@ class YAMLTest {
   @DisplayName("Should generate the correct YAML")
   fun shouldGenerateCorrectYAML() {
     val hapiFile = "src/test/fixtures/YAML/Main.hp"
-    val output = File(yamlFromFile(hapiFile)).readText()
+    val outputFile = File(yamlFromFile(hapiFile))
 
     val expectedFile = "src/test/fixtures/YAML/Expected.yaml"
     val expectedOutput = File(expectedFile).readText()
 
-    assertThat(output).isEqualTo(expectedOutput)
+    assertThat(outputFile.readText()).isEqualTo(expectedOutput)
+
+    outputFile.delete()
   }
   
   @Test
