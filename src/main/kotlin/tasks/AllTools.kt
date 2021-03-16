@@ -22,15 +22,18 @@ fun main(args: Array<String>) {
   val sourceFile = File(filepath)
   val root = getDirName(filepath)
   val sourceText = sourceFile.readText()
+  
   val datamap = evalDataMap(sourceText, root)
+  DataMapOrderChecker(datamap) // Check that datamap has right keys  
   val irNode = evalIR(sourceText, root, datamap) as IRNode
 
-  val actionsDataMap = datamap.getValue("Actions")
   val actorsDataMap = datamap.getValue("Actors")
+  val actionsDataMap = datamap.getValue("Actions")
   val resourcesDataMap = datamap.getValue("Resources")
 
   // matrix creation
-  val matrix = MatrixPrinter(actorsDataMap.elements(), resourcesDataMap.elements())
+  val matrix = MatrixPrinter(actorsDataMap.elements(), actionsDataMap.elements(),
+                             resourcesDataMap.elements())
   matrix.populateMatrix(irNode.ir)
 
   // generates HTML and JSON
