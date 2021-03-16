@@ -1,0 +1,13 @@
+data Actors = Analyst(Alice, Bob);
+data Resources = res1, res2, res3;
+data Actions = Reads, Updates, Deletes;
+
+main =
+  DENY
+  EXCEPT {
+    ALLOW {
+      Actors: Analyst
+      Resources
+      Actions
+    }
+  };

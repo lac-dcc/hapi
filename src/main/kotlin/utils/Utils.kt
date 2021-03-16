@@ -22,7 +22,6 @@ fun relativePath(p1: String, p2: String): String {
   return getDirName(p1) + "/" + p2;
 }
 
-
 fun filePathInDir(file: String, dir: String): String {
   return dir + "/" + file;
 }
