@@ -51,7 +51,15 @@ class MatrixPrinter {
    * @param actors    names of the actors
    * @param resources names of the resources
    */
-  constructor(actors: Set<String>, actions: Set<String>, resources: Set<String>) {
+  constructor(datamap: DataMap) {
+    DataMapOrderChecker(datamap) // Check that datamap has correct keys
+
+    // Only consider the atoms
+    fun getDMAtoms(latticeName: String) =
+      datamap[latticeName]!!.atoms(datamap[latticeName]!!.TOP).unwrap().sorted()
+    val actors = getDMAtoms("Actors")
+    val actions = getDMAtoms("Actions")
+    val resources = getDMAtoms("Resources")
 
     // associate the actors names with the matrix indexes
     var index: Int = 0
@@ -235,13 +243,8 @@ fun main(args: Array<String>) {
   DataMapOrderChecker(datamap) // Check that datamap has right keys
   val irNode = evalIR(sourceText, root, datamap) as IRNode
 
-  val actorsDataMap = datamap.getValue("Actors")
-  val actionsDataMap = datamap.getValue("Actions")
-  val resourcesDataMap = datamap.getValue("Resources")
-
   // generate matrix
-  val matrix = MatrixPrinter(actorsDataMap.elements(), actionsDataMap.elements(),
-                             resourcesDataMap.elements())
+  val matrix = MatrixPrinter(datamap)
   matrix.populateMatrix(irNode.ir)
 
   // Generate output files

@@ -32,8 +32,7 @@ fun main(args: Array<String>) {
   val resourcesDataMap = datamap.getValue("Resources")
 
   // matrix creation
-  val matrix = MatrixPrinter(actorsDataMap.elements(), actionsDataMap.elements(),
-                             resourcesDataMap.elements())
+  val matrix = MatrixPrinter(datamap)
   matrix.populateMatrix(irNode.ir)
 
   // generates HTML and JSON
