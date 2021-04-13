@@ -119,17 +119,15 @@ tasks.test {
 }
 sourceSets {
     create("benchmarks") {
-        withConvention(KotlinSourceSet::class) {
-            kotlin.srcDir("src/benchmarks/kotlin")
-            resources.srcDir("src/benchmarks/resources")
-            compileClasspath += sourceSets["main"].output //+ configurations["testRuntimeClasspath"]
-            runtimeClasspath += output + compileClasspath + sourceSets["main"].runtimeClasspath
+        kotlin {
+            compileClasspath += main.get().output + configurations.runtimeClasspath
+            runtimeClasspath += output + compileClasspath
         }
     }
 }
 
 task("benchmarks", JavaExec::class) {
-    sourceSets["benchmarks"].runtimeClasspath.forEach{println(it)}
+    // sourceSets["benchmarks"].runtimeClasspath.forEach{println(it)}
     description = "Runs a set of random policies to make a benchmark"
     classpath = sourceSets["benchmarks"].runtimeClasspath + sourceSets["main"].runtimeClasspath
     main = "hapi.BenchmarkKt"
