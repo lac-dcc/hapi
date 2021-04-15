@@ -1,5 +1,7 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.gradle.api.tasks.options.Option;
+import org.gradle.api.tasks.Input
 
 plugins {
     // Apply the Kotlin JVM plugin to add support for Kotlin.
@@ -127,9 +129,32 @@ sourceSets {
     }
 }
 
-task("benchmarks", JavaExec::class) {
+open class BenchmarkTask: JavaExec() {
+    private val newargs = mutableMapOf<String, String>();
+    private val arguments = listOf("deep")
+
+    @get:Input
+    var deep: String = ""
+
+    @Option(option = "deep", description = "Max deep of the main policy")
+    public fun setDeep(deep: String): Void? {
+        this.deep = deep;
+        newargs["deep"] = deep;
+        return null
+    }
+
+    @TaskAction
+    public fun fillArguments(): Void? {
+        this.args(this.newargs)
+        return null
+    }
+
+}
+
+task("benchmarks", BenchmarkTask::class) {
     // sourceSets["benchmarks"].runtimeClasspath.forEach{println(it)}
     description = "Runs a set of random policies to make a benchmark"
     classpath = sourceSets["benchmarks"].runtimeClasspath + sourceSets["main"].runtimeClasspath
     main = "hapi.BenchmarkKt"
+    fillArguments()
 }

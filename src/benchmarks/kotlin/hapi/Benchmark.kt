@@ -16,21 +16,25 @@ fun main(args: Array<String>) {
         return usage()
     }
 
+    println("bladjfa")
+    args.forEach{println(it)}
+    println(args.size)
+
     // Create the random policy based on given parameters
     // BEGIN TEMPORARY (dummy code)
-    val fileName = args[0]
-    val root = getDirName(fileName)
-    val source = File(fileName).readText()
+    // val fileName = args[0]
+    // val root = getDirName(fileName)
+    // val source = File(fileName).readText()
     // END TEMPORARY (dummy code)
     ////////////////////////////////////////////////////////////
 
     // Measure time to parse the created policy
-    val elapsed = measureTimeMillis {
+    // val elapsed = measureTimeMillis {
         // Create the IR (parsing)
-        evalIR(source, root, evalDataMap(source, root))
-    }
+        // evalIR(source, root, evalDataMap(source, root))
+    // }
     ////////////////////////////////////////////////////////////
 
     // Write time in the output file
-    println("Elapsed time: $elapsed")
+    // println("Elapsed time: $elapsed")
 }
