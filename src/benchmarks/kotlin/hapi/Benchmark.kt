@@ -5,6 +5,7 @@ import kotlin.system.measureTimeMillis
 
 import hapi.*
 import tasks.usage
+import tasks.YAMLGenerator
 import utils.*
 
 /* The program arguments are of the format
@@ -16,11 +17,17 @@ fun main(args: Array<String>) {
     }
 
     // Create the random policy based on given parameters
+    // BEGIN TEMPORARY (dummy code)
+    val fileName = args[0]
+    val root = getDirName(fileName)
+    val source = File(fileName).readText()
+    // END TEMPORARY (dummy code)
     ////////////////////////////////////////////////////////////
 
     // Measure time to parse the created policy
     val elapsed = measureTimeMillis {
         // Create the IR (parsing)
+        evalIR(source, root, evalDataMap(source, root))
     }
     ////////////////////////////////////////////////////////////
 
