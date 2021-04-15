@@ -131,15 +131,15 @@ sourceSets {
 
 open class BenchmarkTask: JavaExec() {
     private val newargs = mutableMapOf<String, String>();
-    private val arguments = listOf("deep")
+    private val arguments = listOf("policyDepth")
 
     @get:Input
-    var deep: String = ""
+    var policyDepth: String = ""
 
-    @Option(option = "deep", description = "Max deep of the main policy")
-    public fun setDeep(deep: String): Void? {
-        this.deep = deep;
-        newargs["deep"] = deep;
+    @Option(option = "policyDepth", description = "Max depth of the main policy")
+    public fun setPolicyDepth(policyDepth: String): Void? {
+        this.policyDepth = policyDepth;
+        newargs["policyDepth"] = policyDepth;
         return null
     }
 

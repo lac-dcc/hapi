@@ -16,9 +16,8 @@ fun main(args: Array<String>) {
         return usage()
     }
 
-    println("bladjfa")
+    println("Number of arguments: " + args.size.toString())
     args.forEach{println(it)}
-    println(args.size)
 
     // Create the random policy based on given parameters
     // BEGIN TEMPORARY (dummy code)
