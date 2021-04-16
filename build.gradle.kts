@@ -131,15 +131,58 @@ sourceSets {
 
 open class BenchmarkTask: JavaExec() {
     private val newargs = mutableMapOf<String, String>();
-    private val arguments = listOf("policyDepth")
+    private val arguments = listOf("numPosets", "posetLength",
+                                   "posetDepth", "policyLength",
+                                   "policyDepth")
 
-    @get:Input
+    @get: Input
+    var numPosets: String = ""
+    @get: Input
+    var numElms: String = ""
+    @get: Input
+    var posetDepth: String = ""
+    @get: Input
+    var policyLength: String = ""
+    @get: Input
     var policyDepth: String = ""
 
-    @Option(option = "policyDepth", description = "Max depth of the main policy")
+    @Option(option = "numPosets",
+            description = "Max number of posets in the product poset (its dimension).")
+    public fun setNumPosets(numPosets: String): Void? {
+        this.numPosets = numPosets;
+        this.newargs["numPosets"] = numPosets;
+        return null
+    }
+    
+    @Option(option = "numElms",
+            description = "(array) Max number of elements in each poset.")
+    public fun setNumElms(numElms: String): Void? {
+        this.numElms = numElms;
+        this.newargs["numElms"] = numElms;
+        return null
+    }
+
+    @Option(option = "posetDepth",
+            description = "(array) Max depth of each poset.")
+    public fun setPosetDepth(posetDepth: String): Void? {
+        this.posetDepth = posetDepth;
+        this.newargs["posetDepth"] = posetDepth;
+        return null
+    }
+
+    @Option(option = "policyLength",
+            description = "Max paired length of the policy.")
+    public fun setPolicyLength(policyLength: String): Void? {
+        this.policyLength = policyLength;
+        this.newargs["policyLength"] = policyLength;
+        return null
+    }
+
+    @Option(option = "policyDepth",
+            description = "Max depth of the policy.")
     public fun setPolicyDepth(policyDepth: String): Void? {
         this.policyDepth = policyDepth;
-        newargs["policyDepth"] = policyDepth;
+        this.newargs["policyDepth"] = policyDepth;
         return null
     }
 

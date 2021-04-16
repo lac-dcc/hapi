@@ -8,8 +8,14 @@ import tasks.usage
 import tasks.YAMLGenerator
 import utils.*
 
-/* The program arguments are of the format
- * <size-of-poset> <depth-of-poset> <size-of-policy> <depth-of-policy>
+/* The program arguments are the following
+ *
+ * numPosets the number of posets in the product poset
+ * numElms (array) the number of elements in each poset
+ * posetDepth (array) the depth of each poset
+ * policyLength the number of paired allow/deny's in the policy
+ * policyDepth the maximum depth (number of nested statements) of
+ *              the policy
  */
 fun main(args: Array<String>) {
     if (args.size < 1) {
