@@ -2,6 +2,9 @@ package hapi;
 
 import java.io.File
 import kotlin.system.measureTimeMillis
+import kotlin.system.exitProcess
+import kotlinx.cli.*
+
 
 import hapi.*
 import tasks.usage
@@ -17,10 +20,38 @@ import utils.*
  * policyDepth the maximum depth (number of nested statements) of
  *              the policy
  */
-fun main(args: Array<String>) {
-    if (args.size < 1) {
-        return usage()
+data class Arguments(val parserName: String, val args: Array<String>){
+    private val parser = ArgParser(parserName)
+    val numPosets by parser.option(ArgType.Int, "numPosets",
+        description = "Max number of posets in the product poset (its dimension).").required()
+ 
+    val numElms by parser.option(ArgType.Int, "numElms",
+        description = "Max number of elements in each poset.").required()
+
+    val posetDepth by parser.option(ArgType.Int, "posetDepth",
+        description = "Max depth of each poset.").required()
+
+    val policyLength by parser.option(ArgType.Int, "policyLength",
+        description = "Max paired length of the policy.").required()
+
+    val policyDepth by parser.option(ArgType.Int, "policyDepth",
+        description = "Max depth of the policy.").required()
+    
+    init {
+        parser.parse(args)
     }
+}
+
+fun main(args: Array<String>) {
+    lateinit var argData: Arguments
+    try {
+        argData = Arguments("Hapi benchmarks tool", args) 
+    } catch(e:IllegalStateException){
+        println(e.message)
+        exitProcess(1)
+    }
+    println(argData.numElms)
+    
 
     println("Number of arguments: " + args.size.toString())
     args.forEach{println(it)}
