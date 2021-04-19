@@ -123,14 +123,22 @@ tasks.test {
 
 sourceSets {
     create("benchmarks") {
-        kotlin {
-            dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-cli:0.2.1")
-            }
-            compileClasspath += main.get().output + configurations.runtimeClasspath
-            runtimeClasspath += output + compileClasspath
+        compileClasspath += main.get().output + configurations.runtimeClasspath
+        runtimeClasspath += output + compileClasspath
+        dependencies {
+            implementation("org.jetbrains.kotlinx:kotlinx-cli:0.2.1")
+            
         }
     }
+}
+
+val benchmarksImplementation by configurations.getting {
+    extendsFrom(configurations.implementation.get())
+}
+configurations["benchmarksRuntimeOnly"].extendsFrom(configurations.runtimeOnly.get())
+
+tasks.register<Jar>("benchmarksJar", Jar::class) {
+    from(sourceSets["benchmarks"].output)
 }
 
 open class BenchmarkTask: JavaExec() {
@@ -187,10 +195,10 @@ open class BenchmarkTask: JavaExec() {
 }
 
 task("benchmarks", BenchmarkTask::class) {
-    // sourceSets["benchmarks"].runtimeClasspath.forEach{println(it)}
     description = "Runs a set of random policies to make a benchmark"
-    classpath = sourceSets["benchmarks"].runtimeClasspath + sourceSets["main"].runtimeClasspath
-    main = "hapi.BenchmarkKt"
+    classpath += sourceSets["benchmarks"].runtimeClasspath + sourceSets["main"].runtimeClasspath
+    main = "bench.BenchmarkKt"
+    dependsOn(":compileBenchmarksKotlin")
     doFirst{
         fillArguments()
     }

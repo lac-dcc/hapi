@@ -1,11 +1,11 @@
-package hapi;
+package bench
 
 import java.io.File
 import kotlin.system.measureTimeMillis
 import kotlin.system.exitProcess
 import kotlinx.cli.*
 
-
+import mock.*
 import hapi.*
 import tasks.usage
 import tasks.YAMLGenerator
@@ -20,6 +20,7 @@ import utils.*
  * policyDepth the maximum depth (number of nested statements) of
  *              the policy
  */
+//  gradle -q benchmarks --numPosets=3 --numElms=6 --posetDepth=2 --policyLength=5
 data class Arguments(val parserName: String, val args: Array<String>){
     private val parser = ArgParser(parserName)
     val numPosets by parser.option(ArgType.Int, "numPosets",
@@ -52,10 +53,12 @@ fun main(args: Array<String>) {
     }
     println(argData.numElms)
     
-
-    println("Number of arguments: " + args.size.toString())
     args.forEach{println(it)}
 
+    val a : Char = 'A'
+    println(a.until('Z'+1))
+
+    println(PosetElement.validChars)
     // Create the random policy based on given parameters
     // BEGIN TEMPORARY (dummy code)
     // val fileName = args[0]
