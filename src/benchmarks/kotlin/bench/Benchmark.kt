@@ -44,7 +44,7 @@ data class Arguments(val parserName: String, val args: Array<String>){
 }
 
 fun main(args: Array<String>) {
-    lateinit var argData: Arguments
+    /*lateinit var argData: Arguments
     try {
         argData = Arguments("Hapi benchmarks tool", args) 
     } catch(e:IllegalStateException){
@@ -52,28 +52,22 @@ fun main(args: Array<String>) {
         exitProcess(1)
     }
     println(argData.numElms)
+    println(PosetElement.validChars)*/
+
+
+    /* 1. Create a list of posets */
+    println(("asdfasdas").takeLast(1))
+    val pp  = PosetElement("ss", 3, 3)
+    println(pp)
+
+    /* 2. Create the random policy based on given parameters */
     
-    args.forEach{println(it)}
-
-    val a : Char = 'A'
-    println(a.until('Z'+1))
-
-    println(PosetElement.validChars)
-    // Create the random policy based on given parameters
-    // BEGIN TEMPORARY (dummy code)
-    // val fileName = args[0]
-    // val root = getDirName(fileName)
-    // val source = File(fileName).readText()
-    // END TEMPORARY (dummy code)
-    ////////////////////////////////////////////////////////////
-
-    // Measure time to parse the created policy
+    /* 3. Measure time to parse the created policy */
     // val elapsed = measureTimeMillis {
         // Create the IR (parsing)
         // evalIR(source, root, evalDataMap(source, root))
     // }
-    ////////////////////////////////////////////////////////////
-
+    
     // Write time in the output file
     // println("Elapsed time: $elapsed")
 }

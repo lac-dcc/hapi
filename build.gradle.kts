@@ -198,7 +198,6 @@ task("benchmarks", BenchmarkTask::class) {
     description = "Runs a set of random policies to make a benchmark"
     classpath += sourceSets["benchmarks"].runtimeClasspath + sourceSets["main"].runtimeClasspath
     main = "bench.BenchmarkKt"
-    dependsOn(":compileBenchmarksKotlin")
     doFirst{
         fillArguments()
     }
