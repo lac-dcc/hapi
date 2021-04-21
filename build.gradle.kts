@@ -126,8 +126,7 @@ sourceSets {
         compileClasspath += main.get().output + configurations.runtimeClasspath
         runtimeClasspath += output + compileClasspath
         dependencies {
-            implementation("org.jetbrains.kotlinx:kotlinx-cli:0.2.1")
-            
+            implementation("org.jetbrains.kotlinx:kotlinx-cli:0.2.1")   
         }
     }
 }

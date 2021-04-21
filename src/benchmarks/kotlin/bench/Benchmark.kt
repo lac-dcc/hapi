@@ -57,8 +57,9 @@ fun main(args: Array<String>) {
 
     /* 1. Create a list of posets */
     println(("asdfasdas").takeLast(1))
-    val pp  = PosetElement("ss", 3, 3)
-    println(pp)
+    val ss  = PosetElement("ss", 3, 3)
+    println()
+    println(ss)
 
     /* 2. Create the random policy based on given parameters */
     
