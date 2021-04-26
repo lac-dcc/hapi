@@ -71,7 +71,7 @@ IMPORT: 'import' ;
 EXPORT: 'export' ;
 WHERE: 'where' ;
 DATA: 'data' ;
-ID:    [a-zA-Z0-9]+ ;
+ID:    [a-zA-Z][_a-zA-Z0-9]* ;
 
 
 

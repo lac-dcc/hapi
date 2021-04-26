@@ -5,7 +5,7 @@ import bench.*
 /* posets are declared as a n-tree where for each level we
 have $n$ elements per nodes
 */
-class PosetElement(val label: String, val level: Int, val childrenQtt: Int){
+class PosetElement(val label: String, val level: Int, val childrenQtt: Int) {
   val children = mutableListOf<PosetElement>()
 
   init {
@@ -18,7 +18,24 @@ class PosetElement(val label: String, val level: Int, val childrenQtt: Int){
     }
   }
 
+  public fun toArray(): Array<PosetElement> {
+    var bfsArray = arrayOf<PosetElement>(this)
+    var index = 0;
+    while(index < bfsArray.count()){
+      val parent = bfsArray[index]
+      for (child in parent.children){
+        bfsArray += child
+      }
+      index+=1;
+    }
+    return bfsArray
+  }
+
   override public fun toString(): String {
+    return this.label
+  }
+
+  public fun posetStructure(): String {
     val bfsFifo = mutableListOf<PosetElement>(this)
     var computedString = ""
 
@@ -37,6 +54,7 @@ class PosetElement(val label: String, val level: Int, val childrenQtt: Int){
           if(childIt.hasNext()){
             computedString += ", "
           }
+        }
         computedString += ")"
       }
       if(bfsFifo.count() > 0){
@@ -47,4 +65,5 @@ class PosetElement(val label: String, val level: Int, val childrenQtt: Int){
     }
     return computedString
   }
+
 }
