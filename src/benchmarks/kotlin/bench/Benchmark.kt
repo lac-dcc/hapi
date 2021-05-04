@@ -1,6 +1,10 @@
 package bench
 
 import java.io.File
+import java.io.ByteArrayOutputStream
+import java.nio.charset.StandardCharsets.UTF_8
+import java.util.zip.GZIPOutputStream
+
 import kotlin.system.measureTimeMillis
 import kotlin.system.exitProcess
 import kotlinx.cli.*
@@ -20,7 +24,7 @@ import utils.*
 * policyDepth the maximum depth (number of nested statements) of
 *              the policy
 */
-//  gradle -q benchmarks --numPosets=3 --numElms=6 --posetDepth=2 --policyLength=5
+//  gradle -q benchmarks --numPosets=3 --numElms=6 --posetDepth=2 --policyLength=5 --policyDepth=2
 data class Arguments(val parserName: String, val args: Array<String>){
   private val parser = ArgParser(parserName)
   val numPosets by parser.option(ArgType.Int, "numPosets",
@@ -43,6 +47,12 @@ data class Arguments(val parserName: String, val args: Array<String>){
   }
 }
 
+fun gzip(content: String): ByteArray {
+  val bos = ByteArrayOutputStream()
+  GZIPOutputStream(bos).bufferedWriter(UTF_8).use { it.write(content) }
+  return bos.toByteArray()
+}
+
 fun main(args: Array<String>) {
   lateinit var argData: Arguments
   try {
@@ -52,27 +62,42 @@ fun main(args: Array<String>) {
       exitProcess(1)
   }
 
-  /* 1. Create a map of posets -> ProductPoset */
-  val posets = mutableListOf<PosetElement>()
-  for (i in 1..argData.numPosets)
-    posets.add(PosetElement("P"+i, argData.posetDepth, argData.numElms))
+  val yamlGenerator = YAMLGenerator();
 
-  val productPoset = posets.associateBy({it.label}, {it})
-
-
-  /* 2. Create the random policy based on given parameters */
-  val pol = Policy(IRType.DENY, productPoset)
-  pol.generateRandom(argData.policyLength, argData.policyDepth)
-  val source = pol.toString()
+  for (i in 2..argData.numElms){
+    for (j in 2..argData.posetDepth){
   
-  /* 3. Measure time to parse the created policy */
-  val datamap = evalDataMap(source, "")
-  val ast = evalIR(source, "", datamap) as IRNode
-  // val elapsed = measureTimeMillis {
-      // Create the IR (parsing)
-      // evalIR(source, root, evalDataMap(source, root))
-  // }
-  
-  // Write time in the output file
-  // println("Elapsed time: $elapsed")
+
+      /* 1. Create a map of posets -> ProductPoset */
+      val posets = mutableListOf<PosetElement>(
+        PosetElement("Actors", j, i),
+        PosetElement("Actions", j, i),
+        PosetElement("Resources", j, i)
+      )
+      val productPoset = posets.associateBy({it.label}, {it})
+
+
+      /* 2. Create the random policy based on given parameters */
+      var yamlBytesQtt = 0
+      var hapiBytesQtt = 0
+      for(round in 1..100){
+        val pol = Policy(IRType.DENY, productPoset)
+        pol.generateRandom(argData.policyLength, argData.policyDepth)
+        val source = pol.toString()
+        val datamap = evalDataMap(source, "")
+        val ast = evalIR(source, "", datamap) as IRNode
+        yamlGenerator.generate(ast.ir, datamap, "benchmark.yaml");
+        val file = File("benchmark.yaml")
+        val yamlSource = file.readText()
+
+        /* 3. Measure time to parse the created policy */
+        hapiBytesQtt += gzip(source).count()
+        yamlBytesQtt += gzip(yamlSource).count()
+      }
+
+      println("Yaml bytes mean: "+ yamlBytesQtt/100)
+      println("Hapi bytes mean: "+ hapiBytesQtt/100)
+      println()
+    }
+  }
 }
