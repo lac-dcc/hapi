@@ -110,9 +110,30 @@ class EvaluationTest {
     }
 
     val e1 = assertFailsWith<Exception>{ irFromString(program("K: K2")) }
-    assertEquals("undefined value K2", e1.message)
+    assertEquals("line 10:12 undefined value K2", e1.message)
 
     val e2 = assertFailsWith<Exception>{ irFromString(program("L: L1")) }
-    assertEquals("undefined attribute L", e2.message)
+    assertEquals("line 10:12 Undefined attribute \"L\"", e2.message)
+  }
+
+  @Test
+  @DisplayName("Non existent module")
+  fun nonExistentModule() {
+    val program =
+      """
+      import inexistentModule;
+      data P = P1;
+
+      main =  
+        DENY
+        EXCEPT {
+          ALLOW {
+            P: P1
+          }
+        };
+      """
+
+    val e1 = assertFailsWith<Exception>{irFromString(program)}
+    assertEquals("line 2:13 Module 'inexistentModule' does not exist", e1.message)
   }
 }

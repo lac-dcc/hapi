@@ -1,5 +1,6 @@
 package hapi
 
+import hapi.error.HapiErrorListener
 import org.antlr.v4.runtime.*
 import org.antlr.v4.runtime.tree.ParseTree
 import org.antlr.v4.runtime.misc.ParseCancellationException
@@ -9,22 +10,11 @@ import java.io.InputStream
 import HapiLexer
 import HapiParser
 
-val errorListener = object : BaseErrorListener() {
-  override fun syntaxError(
-    recognizer: Recognizer<*, *>?,
-    offendingSymbol: Any?,
-    line: Int,
-    charPositionInLine: Int,
-    message: String,
-    e: RecognitionException?
-  ) = throw ParseCancellationException("line " + line + ":" + charPositionInLine + " " + message)
-}
-
 fun tokenize(source: String): CommonTokenStream =
   CharStreams.fromString(source).let {
     val lexer = HapiLexer(it).apply {
       removeErrorListeners()
-      addErrorListener(errorListener)
+      addErrorListener(HapiErrorListener())
     }
     CommonTokenStream(lexer)
   }
@@ -32,7 +22,7 @@ fun tokenize(source: String): CommonTokenStream =
 fun parse(tokens: CommonTokenStream): HapiParser.ProgramContext =
   HapiParser(tokens).apply {
     removeErrorListeners()
-    addErrorListener(errorListener)
+    addErrorListener(HapiErrorListener())
   }.program()
 
 fun evalDataMap(source: String, root: String): DataMap = 

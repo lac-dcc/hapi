@@ -8,11 +8,13 @@ import utils.*
 class YAMLGenerator {
 
   fun generate(ir: IR, datamap: DataMap, filename: String) {
+    DataMapOrderChecker(datamap) // Check that datamap has right keys
+      
     val file = File(filename);
 
     file.bufferedWriter().use { out ->
       val resources = datamap["Resources"]!!;
-      out.write("data: ${resources.atoms(resources.TOP)}\n");
+      out.write("data: ${resources.atoms(resources.TOP).unwrap()}\n");
 
       out.write("rules:\n");
 
@@ -40,7 +42,9 @@ fun main(args: Array<String>) {
   File(file).let {
     val root = getDirName(file)
     val source = it.readText()
+    
     val datamap = evalDataMap(source, root)
+    
     val ast = evalIR(source, root, datamap) as IRNode
 
     val outputFile = changeExtension(file, "yaml")
