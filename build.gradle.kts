@@ -32,10 +32,6 @@ dependencies {
     // Use the Kotlin JUnit integration.
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 
-    // Use HEML manipulator for matrix printer
-    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-html-js:0.7.1")
-
     implementation("com.google.code.gson:gson:2.8.5")
 
     antlr("org.antlr:antlr4:4.8")

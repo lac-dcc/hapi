@@ -35,10 +35,8 @@ fun main(args: Array<String>) {
   val matrix = MatrixPrinter(datamap)
   matrix.populateMatrix(irNode.ir)
 
-  // generates HTML and JSON
-  var matrixOutputFile = changeExtension(filepath, "html")
-  matrix.generateHtmlFile(matrixOutputFile)
-  matrixOutputFile = changeExtension(filepath, "json")
+  // generates JSON
+  val  matrixOutputFile = changeExtension(filepath, "json")
   matrix.generateJsonFile(matrixOutputFile)
 
   // generates .dot files

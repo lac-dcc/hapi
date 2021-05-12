@@ -8,9 +8,6 @@ import java.io.FileOutputStream
 import java.io.File
 import java.io.FileWriter
 
-import kotlinx.html.*
-import kotlinx.html.dom.*
-
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.OutputKeys
 import javax.xml.parsers.DocumentBuilderFactory
@@ -23,16 +20,15 @@ import com.google.gson.GsonBuilder
  * The class responsible for the matrix representation of a Hapi policy.
  * <p>
  *     It implements the Kotlin matrix representation, as well as routines to
- *     generate its respective serialized formats, namely HTML and JSON.
+ *     generate its JSON version.
  * Usage example:
  * <pre>
  *     // generate matrix
  *     val matrix = MatrixPrinter(actorsDataMap.elements(),
  *                                resourcesDataMap.elements())
  *     matrix.populateMatrix(irNode.ir)
- *     // HTML and JSON
+ *     // Generate JSON
  *     matrix.generateHtmlFile("Output.html")
- *     matrix.generateJsonFile("Output.json")
  * </pre>
  */
 class MatrixPrinter {
@@ -113,80 +109,6 @@ class MatrixPrinter {
   }
 
   /**
-   * Generates and fills the target HTML serialized file with the properly
-   * formatted contents of the Hapi matrix.
-   * <p>
-   *     Makes use of the Kotlin DSL for HTML
-   *     <a href="https://github.com/Kotlin/kotlinx.html">kotlinx.html</a>
-   *     to easily create the java object.
-   * @param htmFileName target file
-   */
-  public fun generateHtmlFile(htmFileName: String) {
-    val document = DocumentBuilderFactory.newInstance().
-      newDocumentBuilder().newDocument()
-
-    //kotlinx.html notation to generate a html page
-    val html = document.create.html {
-      head {
-        title("Lattice Matrix")
-        style {
-          unsafe {
-            raw(
-              """
-              table, th, td {
-                border: 1px solid black;
-                border-collapse: collapse;
-              }
-              th, td {
-                padding: 8px 4px;
-                text-align: left;
-              }
-              p {
-                margin: 4px 0;
-              }
-              """
-            )
-          }
-        }
-      }
-      body {
-        table {
-          tr {
-            th {+" "}
-            for (resource_name in indexedResources) {
-              th {+resource_name}
-            }
-          }
-          for (i in 0..(matrix.size)-1) {
-            tr {
-              th {+indexedActors[i]}
-              for (j in 0..(matrix[i].size)-1) {
-                val cell = matrix[i][j]
-                td {
-                  // Format something like "Reads: 0"
-                  indexedActions.forEach { action ->
-                    p {+(action + ": ${cell[action]}")}
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-
-    with(TransformerFactory.newInstance().newTransformer()) {
-      setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no")
-      setOutputProperty(OutputKeys.METHOD, "xml")
-      setOutputProperty(OutputKeys.INDENT, "yes")
-      setOutputProperty(OutputKeys.ENCODING, "UTF-8")
-      setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4")
-      transform(DOMSource(html),
-        StreamResult(OutputStreamWriter(FileOutputStream(htmFileName), "UTF-8")))
-    }
-  }
-
-  /**
    * Generates and fills the target JSON serialized file with the properly
    * formatted contents of the Hapi matrix.
    * <p>
@@ -222,7 +144,7 @@ class MatrixPrinter {
 }
 
 /**
- * Builds the matrix and generates both HTML and JSON output files.
+ * Builds the matrix and generates JSON output file.
  * This is called by the gradle task "matrix".
  *
  * @param args the Hapi policy file name. The output serialized files shall have
@@ -247,10 +169,6 @@ fun main(args: Array<String>) {
   val matrix = MatrixPrinter(datamap)
   matrix.populateMatrix(irNode.ir)
 
-  // Generate output files
-  var matrixOutputFile = changeExtension(filepath, "html")
-  matrix.generateHtmlFile(matrixOutputFile)
-
-  matrixOutputFile = changeExtension(filepath, "json")
+  val matrixOutputFile = changeExtension(filepath, "json")
   matrix.generateJsonFile(matrixOutputFile);
 }
