@@ -62,6 +62,8 @@ fun main(args: Array<String>) {
       exitProcess(1)
   }
 
+
+  println("numPosets;numElms;posetDepth;policyLength;policyDepth;yamlBytesQtt;hapiBytesQtt")
   val yamlGenerator = YAMLGenerator();
 
   for (i in 2..argData.numElms){
@@ -95,9 +97,10 @@ fun main(args: Array<String>) {
         yamlBytesQtt += gzip(yamlSource).count()
       }
 
-      println("Yaml bytes mean: "+ yamlBytesQtt/100)
+      /* println("Yaml bytes mean: "+ yamlBytesQtt/100)
       println("Hapi bytes mean: "+ hapiBytesQtt/100)
-      println()
+      println() */
+      println("3;$i;$j;${argData.policyLength};${argData.policyDepth};${yamlBytesQtt/100};${hapiBytesQtt/100}")
     }
   }
 }
