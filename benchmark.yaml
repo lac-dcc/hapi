@@ -1,16 +1,40 @@
 data: [Resources_F, Resources_E, Resources_D, Resources_C, Resources_B, Resources_A]
 rules:
   - identities:
-      users: Actors_E
-      Actions_C:
-        data: [Resources_B]
-      Actions_A:
+      users: Actors_C
+      Actions_D:
         data: [Resources_E]
+      Actions_E:
+        data: [Resources_A]
+  - identities:
+      users: Actors_F
+      Actions_E:
+        data: [Resources_A]
+  - identities:
+      users: Actors_E
+      Actions_E:
+        data: [Resources_A, Resources_D]
+      Actions_F:
+        data: [Resources_D]
+      Actions_D:
+        data: [Resources_D]
+      Actions_C:
+        data: [Resources_D]
+      Actions_B:
+        data: [Resources_D]
+      Actions_A:
+        data: [Resources_D]
   - identities:
       users: Actors_D
+      Actions_E:
+        data: [Resources_A]
       Actions_B:
-        data: [Resources_E]
+        data: [Resources_D]
   - identities:
-      users: Actors_C
-      Actions_B:
-        data: [Resources_E]
+      users: Actors_B
+      Actions_E:
+        data: [Resources_A]
+  - identities:
+      users: Actors_A
+      Actions_E:
+        data: [Resources_A]
