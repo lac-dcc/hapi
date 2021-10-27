@@ -63,7 +63,8 @@ fun main(args: Array<String>) {
   }
 
 
-  println("numPosets;numElms;posetDepth;policyLength;policyDepth;yamlBytesQtt;hapiBytesQtt")
+  println("numPosets;numElms;posetDepth;policyLength;policyDepth;"+
+          "yamlBytesQtt;hapiBytesQtt;onlyPolicyBytesQtt;onlyPosetsBytesQtt")
   val yamlGenerator = YAMLGenerator();
 
   for (i in 2..argData.numElms){
@@ -82,6 +83,7 @@ fun main(args: Array<String>) {
       /* 2. Create the random policy based on given parameters */
       var yamlBytesQtt = 0
       var hapiBytesQtt = 0
+      var onlyPolicyBytesQtt = 0
       for(round in 1..100){
         val pol = Policy(IRType.DENY, productPoset)
         pol.generateRandom(argData.policyLength, argData.policyDepth)
@@ -93,14 +95,18 @@ fun main(args: Array<String>) {
         val yamlSource = file.readText()
 
         /* 3. Measure time to parse the created policy */
+        onlyPolicyBytesQtt = += gzip(pol.policyToString()).count()
         hapiBytesQtt += gzip(source).count()
         yamlBytesQtt += gzip(yamlSource).count()
       }
+      val onlyPosetsBytesQtt = gzip(pol.posetToString()).count()
 
       /* println("Yaml bytes mean: "+ yamlBytesQtt/100)
       println("Hapi bytes mean: "+ hapiBytesQtt/100)
       println() */
-      println("3;$i;$j;${argData.policyLength};${argData.policyDepth};${yamlBytesQtt/100};${hapiBytesQtt/100}")
+      println("3;$i;$j;${argData.policyLength};${argData.policyDepth};"+
+              "${yamlBytesQtt/100};${hapiBytesQtt/100};"+
+              "${onlyPolicyBytesQtt/100};${onlyPosetsBytesQtt}")
     }
   }
 }

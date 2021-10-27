@@ -39,13 +39,19 @@ class Policy(val type: IRType,
   }
 
   override public fun toString(): String {
+    return computedString = posetToString() + "\n" + policyToString()
+  }
+
+  public fun posetToString(): String {
     var computedString = ""
     for ( (posetName, posetElm) in this.posets){
       computedString += "data " + posetName + " = " + posetElm.posetStructure() + "\n"
-    }
-    computedString += "\nmain = \n"+ this.startClause.toString() + ";"
-    
+    }    
     return computedString
+  }
+
+  public fun policyToString(): String {
+    return "main = \n"+ this.startClause.toString() + ";"
   }
   
 }
