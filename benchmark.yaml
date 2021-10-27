@@ -1,0 +1,16 @@
+data: [Resources_F, Resources_E, Resources_D, Resources_C, Resources_B, Resources_A]
+rules:
+  - identities:
+      users: Actors_E
+      Actions_C:
+        data: [Resources_B]
+      Actions_A:
+        data: [Resources_E]
+  - identities:
+      users: Actors_D
+      Actions_B:
+        data: [Resources_E]
+  - identities:
+      users: Actors_C
+      Actions_B:
+        data: [Resources_E]

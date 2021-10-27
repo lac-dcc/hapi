@@ -84,8 +84,9 @@ fun main(args: Array<String>) {
       var yamlBytesQtt = 0
       var hapiBytesQtt = 0
       var onlyPolicyBytesQtt = 0
+      var onlyPosetsBytesQtt = 0
+      val pol = Policy(IRType.DENY, productPoset)
       for(round in 1..100){
-        val pol = Policy(IRType.DENY, productPoset)
         pol.generateRandom(argData.policyLength, argData.policyDepth)
         val source = pol.toString()
         val datamap = evalDataMap(source, "")
@@ -95,11 +96,12 @@ fun main(args: Array<String>) {
         val yamlSource = file.readText()
 
         /* 3. Measure time to parse the created policy */
-        onlyPolicyBytesQtt = += gzip(pol.policyToString()).count()
+        onlyPolicyBytesQtt += gzip(pol.policyToString()).count()
         hapiBytesQtt += gzip(source).count()
         yamlBytesQtt += gzip(yamlSource).count()
+        if(round == 1)
+          onlyPosetsBytesQtt = gzip(pol.posetToString()).count()
       }
-      val onlyPosetsBytesQtt = gzip(pol.posetToString()).count()
 
       /* println("Yaml bytes mean: "+ yamlBytesQtt/100)
       println("Hapi bytes mean: "+ hapiBytesQtt/100)

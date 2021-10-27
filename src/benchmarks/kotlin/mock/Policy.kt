@@ -6,7 +6,8 @@ import hapi.*
 class Policy(val type: IRType,
   val posets: Map<String, PosetElement>) {
 
-  val startClause = Clause(type, mutableListOf<Pair<String, String>>())
+  // var startClause = Clause(type, mutableListOf<Pair<String, String>>())
+  lateinit var startClause: Clause
   private val posetsInArrays = mutableMapOf<String, Array<PosetElement>>()
 
   
@@ -32,14 +33,17 @@ class Policy(val type: IRType,
   }
   
   public fun generateRandom(policyLength: Int, policyDepth: Int){
-    for ((posetName, posetElm) in this.posets){
-      posetsInArrays[posetName] = posetElm.toArray()
+    if(this.posetsInArrays.isEmpty()){
+      for ((posetName, posetElm) in this.posets){
+        this.posetsInArrays[posetName] = posetElm.toArray()
+      }
     }
+    this.startClause = Clause(this.type, mutableListOf<Pair<String, String>>())
     this.inDepthGeneration(this.startClause, policyLength, policyDepth)
   }
 
   override public fun toString(): String {
-    return computedString = posetToString() + "\n" + policyToString()
+    return posetToString() + "\n" + policyToString()
   }
 
   public fun posetToString(): String {
