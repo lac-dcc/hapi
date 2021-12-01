@@ -101,9 +101,6 @@ fun main(args: Array<String>) {
       }
       val onlyPosetsBytesQtt = gzip(pol.posetToString()).count()
 
-      /* println("Yaml bytes mean: "+ yamlBytesQtt/100)
-      println("Hapi bytes mean: "+ hapiBytesQtt/100)
-      println() */
       println("3;$i;$j;${argData.policyLength};${argData.policyDepth};"+
               "${yamlBytesQtt/100};${hapiBytesQtt/100};"+
               "${onlyPolicyBytesQtt/100};${onlyPosetsBytesQtt}")
